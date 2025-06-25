@@ -20,7 +20,7 @@ class FortifyServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        Fortify::ignoreRoutes();
     }
 
     /**
@@ -31,10 +31,10 @@ class FortifyServiceProvider extends ServiceProvider
         Fortify::createUsersUsing(CreateNewUser::class);
 
         Fortify::registerView(function () {
-            return view('auth.register');
+            return view('user.auth.register');
         });
         Fortify::loginView(function () {
-            return view('auth.login');
+            return view('user.auth.login');
         });
 
         RateLimiter::for('login', function (Request $request) {
