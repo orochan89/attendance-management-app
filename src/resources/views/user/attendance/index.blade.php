@@ -38,50 +38,54 @@
                 <th class="attendance-list__cell">詳細</th>
             </tr>
         </thead>
-        <tbody class="attendance-list__tbody"></tbody>
-        @foreach ($attendance as $attendance)
-            <tr class="attendance-list__row">
-                <td class="attendance-list__cell">
-                    {{ \Carbon\Carbon::parse($attendance->date)->format('m/d(D)') }}
-                </td>
-                <td class="attendance-list__table__cell">
-                    {{ $attendance->clock_in_time ? \Carbon\Carbon::parse($attendance->clock_in_time)->format('H:i') : '-' }}
-                </td>
-                <td class="attendance-list__table__cell">
-                    {{ $attendance->clock_out_time ? \Carbon\Carbon::parse($attendance->clock_out_time)->format('H:i') : '-' }}
-                </td>
-                <td class="attendance-list__table__cell">
-                    @php
-                        $totalBreakMinutes = $attendance->breaks->reduce(function ($carry, $break) {
-                            if ($break->break_start && $break->break_end) {
-                                $start = \Carbon\Carbon::parse($break->break_start);
-                                $end = \Carbon\Carbon::parse($break->break_end);
-                                return $carry + $start->diffInMinutes($end);
+        <tbody class="attendance-list__tbody">
+            @foreach ($attendance as $attendance)
+                <tr class="attendance-list__row">
+                    <td class="attendance-list__cell">
+                        {{ \Carbon\Carbon::parse($attendance->date)->format('m/d(D)') }}
+                    </td>
+                    <td class="attendance-list__cell">
+                        {{ $attendance->clock_in_time ? \Carbon\Carbon::parse($attendance->clock_in_time)->format('H:i') : '-' }}
+                    </td>
+                    <td class="attendance-list__cell">
+                        {{ $attendance->clock_out_time ? \Carbon\Carbon::parse($attendance->clock_out_time)->format('H:i') : '-' }}
+                    </td>
+                    <td class="attendance-list__cell">
+                        @php
+                            $totalBreakMinutes = $attendance->breaks->reduce(function ($carry, $break) {
+                                if ($break->break_start && $break->break_end) {
+                                    $start = \Carbon\Carbon::parse($break->break_start);
+                                    $end = \Carbon\Carbon::parse($break->break_end);
+                                    return $carry + $start->diffInMinutes($end);
+                                }
+                                return $carry;
+                            }, 0);
+                            $breakFormatted = sprintf(
+                                '%d:%02d',
+                                floor($totalBreakMinutes / 60),
+                                $totalBreakMinutes % 60,
+                            );
+                        @endphp
+                        {{ $totalBreakMinutes > 0 ? $breakFormatted : '-' }}
+                    </td>
+                    <td class="attendance-list__cell">
+                        @php
+                            if ($attendance->clock_in_time && $attendance->clock_out_time) {
+                                $start = \Carbon\Carbon::parse($attendance->clock_in_time);
+                                $end = \Carbon\Carbon::parse($attendance->clock_out_time);
+                                $workMinutes = $start->diffInMinutes($end) - $totalBreakMinutes;
+                                $workFormatted = sprintf('%d:%02d', floor($workMinutes / 60), $workMinutes % 60);
+                            } else {
+                                $workFormatted = '-';
                             }
-                            return $carry;
-                        }, 0);
-                        $breakFormatted = sprintf('%d:%02d', floor($totalBreakMinutes / 60), $totalBreakMinutes % 60);
-                    @endphp
-                    {{ $totalBreakMinutes > 0 ? $breakFormatted : '-' }}
-                </td>
-                <td class="attendance-list__table__cell">
-                    @php
-                        if ($attendance->clock_in_time && $attendance->clock_out_time) {
-                            $start = \Carbon\Carbon::parse($attendance->clock_in_time);
-                            $end = \Carbon\Carbon::parse($attendance->clock_out_time);
-                            $workMinutes = $start->diffInMinutes($end) - $totalBreakMinutes;
-                            $workFormatted = sprintf('%d:%02d', floor($workMinutes / 60), $workMinutes % 60);
-                        } else {
-                            $workFormatted = '-';
-                        }
-                    @endphp
-                    {{ $workFormatted }}
-                </td>
-                <td class="attendance-list__table__cell">
-                    <a href="{{ route('attendance.show', $attendance->id) }}">詳細</a>
-                </td>
-            </tr>
-        @endforeach
+                        @endphp
+                        {{ $workFormatted }}
+                    </td>
+                    <td class="attendance-list__cell">
+                        <a href="{{ route('attendance.show', $attendance->id) }}">詳細</a>
+                    </td>
+                </tr>
+            @endforeach
         </tbody>
     </table>
 @endsection
