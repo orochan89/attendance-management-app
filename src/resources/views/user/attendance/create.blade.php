@@ -33,7 +33,7 @@
         <div class="status__datetime status__datetime--time current-time"></div>
 
         <div class="status__actions">
-            <form class="status__form" action="" method="POST">
+            <form class="status__form" action="{{ route('attendance.action') }}" method="POST">
                 @csrf
                 @switch($attendance->status)
                     @case('off')

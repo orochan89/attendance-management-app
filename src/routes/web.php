@@ -37,7 +37,7 @@ Route::middleware('guest')->group(function () {
 Route::middleware('auth')->group(function () {
 
     Route::get('/attendance', [UserAttendanceController::class, 'index'])->name('attendance.form');
-    Route::post('/attendance', [UserAttendanceController::class, 'store'])->name('attendance.submit');
+    Route::post('/attendance', [UserAttendanceController::class, 'handleAction'])->name('attendance.action');
 
     Route::get('/attendance/list', [UserAttendanceController::class, 'list'])->name('attendance.list');
 

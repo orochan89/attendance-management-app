@@ -10,12 +10,6 @@
         <h1 class="attendance-list__title">勤怠一覧</h1>
         <div class="attendance-list__header">
             <form class="attendance-list__navigation" action="" method="GET">
-                @php
-                    $currentMonth = request('month') ? \Carbon\Carbon::parse(request('month')) : now();
-                    $prevMonth = $currentMonth->copy()->subMonth()->format('Y-m');
-                    $nextMonth = $currentMonth->copy()->addMonth()->format('Y-m');
-                @endphp
-
                 <a class="attendance-list__nav-button" href="{{ route('attendance.list', ['month' => $prevMonth]) }}">
                     前月
                 </a>
@@ -41,7 +35,7 @@
                 </tr>
             </thead>
             <tbody class="attendance-list__tbody">
-                @forelse ($attendance as $attendance)
+                @forelse ($attendances as $attendance)
                     <tr class="attendance-list__row">
                         <td class="attendance-list__cell">
                             {{ \Carbon\Carbon::parse($attendance->date)->format('m/d(D)') }}
@@ -53,35 +47,10 @@
                             {{ $attendance->clock_out_time ? \Carbon\Carbon::parse($attendance->clock_out_time)->format('H:i') : '-' }}
                         </td>
                         <td class="attendance-list__cell">
-                            @php
-                                $totalBreakMinutes = $attendance->breaks->reduce(function ($carry, $break) {
-                                    if ($break->break_start && $break->break_end) {
-                                        $start = \Carbon\Carbon::parse($break->break_start);
-                                        $end = \Carbon\Carbon::parse($break->break_end);
-                                        return $carry + $start->diffInMinutes($end);
-                                    }
-                                    return $carry;
-                                }, 0);
-                                $breakFormatted = sprintf(
-                                    '%d:%02d',
-                                    floor($totalBreakMinutes / 60),
-                                    $totalBreakMinutes % 60,
-                                );
-                            @endphp
-                            {{ $totalBreakMinutes > 0 ? $breakFormatted : '-' }}
+                            {{ $attendance->total_break_formatted }}
                         </td>
                         <td class="attendance-list__cell">
-                            @php
-                                if ($attendance->clock_in_time && $attendance->clock_out_time) {
-                                    $start = \Carbon\Carbon::parse($attendance->clock_in_time);
-                                    $end = \Carbon\Carbon::parse($attendance->clock_out_time);
-                                    $workMinutes = $start->diffInMinutes($end) - $totalBreakMinutes;
-                                    $workFormatted = sprintf('%d:%02d', floor($workMinutes / 60), $workMinutes % 60);
-                                } else {
-                                    $workFormatted = '-';
-                                }
-                            @endphp
-                            {{ $workFormatted }}
+                            {{ $attendance->work_time_formatted }}
                         </td>
                         <td class="attendance-list__cell">
                             <a href="{{ route('attendance.show', $attendance->id) }}">詳細</a>

@@ -18,6 +18,33 @@ class Attendance extends Model
         'status'
     ];
 
+    public function getTotalBreakMinutesAttribute()
+    {
+        return $this->breaks->sum(function ($break) {
+            return $break->duration_minutes;
+        });
+    }
+
+    public function getTotalBreakFormattedAttribute()
+    {
+        $minutes = $this->total_break_minutes;
+        return $minutes > 0
+            ? sprintf('%d:%02d', floor($minutes / 60), $minutes % 60)
+            : '-';
+    }
+
+    public function getWorkTimeFormattedAttribute()
+    {
+        if ($this->clock_in_time && $this->clock_out_time) {
+            $start = \Carbon\Carbon::parse($this->clock_in_time);
+            $end = \Carbon\Carbon::parse($this->clock_out_time);
+            $workMinutes = $start->diffInMinutes($end) - $this->total_break_minutes;
+
+            return sprintf('%d:%02d', floor($workMinutes / 60), $workMinutes % 60);
+        }
+        return '-';
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);
