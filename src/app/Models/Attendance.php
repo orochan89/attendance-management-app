@@ -14,7 +14,8 @@ class Attendance extends Model
         'date',
         'clock_in_time',
         'clock_out_time',
-        'note'
+        'note',
+        'status'
     ];
 
     public function user()
