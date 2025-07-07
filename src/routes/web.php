@@ -2,10 +2,10 @@
 
 use Illuminate\Support\Facades\Route;
 
-use App\Http\Controllers\RegisterController;
-use App\Http\Controllers\RequestController;
-use App\Http\Controllers\AttendanceController as UserAttendanceController;
-use App\Http\Controllers\AuthenticatedSessionController as UserAuthController;
+use App\Http\Controllers\Staff\RegisterController;
+use App\Http\Controllers\Staff\RequestController;
+use App\Http\Controllers\Staff\AttendanceController as UserAttendanceController;
+use App\Http\Controllers\Staff\AuthenticatedSessionController as UserAuthController;
 
 use App\Http\Controllers\Admin\AuthenticatedSessionController as AdminAuthController;
 use App\Http\Controllers\Admin\AttendanceController as AdminAttendanceController;
@@ -42,7 +42,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/attendance/list', [UserAttendanceController::class, 'list'])->name('attendance.list');
 
     Route::get('/attendance/{id}', [UserAttendanceController::class, 'show'])->name('attendance.show');
-    Route::post('/attendance/{id}', [UserAttendanceController::class, 'requestUpdate'])->name('attendance.request_update');
+    Route::post('/attendance/{id}', [RequestController::class, 'requestUpdate'])->name('attendance.request_update');
 
     Route::get('/stamp_correction_request/list', [RequestController::class, 'index'])->name('request.list');
 });

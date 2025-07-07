@@ -1,11 +1,27 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Staff;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Carbon;
+use App\Models\Attendance;
 
 class AttendanceController extends Controller
 {
+    public function index()
+    {
+        $user = Auth::user();
+        $today = Carbon::today();
+
+        $attendance = Attendance::with('breaks')
+            ->where('user_id', $user->id)
+            ->whereDate('date', $today)
+            ->first();
+
+        return view('user.attendance.create', compact('attendance'));
+    }
+
     public function handleAction(Request $request)
     {
         $action = $request->input('action');
@@ -85,5 +101,14 @@ class AttendanceController extends Controller
             'prevMonth' => $prevMonth,
             'nextMonth' => $nextMonth,
         ]);
+    }
+
+    public function show($id)
+    {
+        $attendance = Attendance::with(['breaks', 'attendanceCorrections'])
+            ->where('user_id', Auth::id())
+            ->findOrFail($id);
+
+        return view('user.attendance.show', compact('attendance'));
     }
 }

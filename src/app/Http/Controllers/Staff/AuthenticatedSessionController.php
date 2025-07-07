@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Staff;
 
-use App\Http\Requests\LoginRequest;
+use App\Http\Requests\Staff\StaffLoginRequest;
 use Illuminate\Support\Facades\Auth;
 
 class AuthenticatedSessionController extends Controller
@@ -12,7 +12,7 @@ class AuthenticatedSessionController extends Controller
         return view('user.auth.login');
     }
 
-    public function store(LoginRequest $request)
+    public function store(StaffLoginRequest $request)
     {
         if (Auth::attempt($request->only('email', 'password'), $request->boolean('remember'))) {
             $request->session()->regenerate();

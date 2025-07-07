@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Staff;
 
-use App\Http\Requests\RegisterRequest;
+use App\Http\Requests\Staff\StaffRegisterRequest;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 
@@ -14,7 +14,7 @@ class RegisterController extends Controller
         return view('user.auth.register');
     }
 
-    public function store(RegisterRequest $request)
+    public function store(StaffRegisterRequest $request)
     {
         $user = User::created([
             'name' => $request->name,
