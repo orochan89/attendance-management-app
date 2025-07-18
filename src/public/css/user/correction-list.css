@@ -1,0 +1,120 @@
+body {
+    background-color: #f0eff2;
+}
+
+.staff {
+    width: 100vw;
+    min-height: 90vh;
+}
+
+.request-list__title {
+    width: 70%;
+    height: auto;
+    margin: 10px auto;
+    padding-left: 20px;
+    font-size: 24px;
+    color: black;
+    border-left: 5px solid #000000;
+}
+
+.request-list__header {
+    width: 70%;
+    height: 10%;
+    margin: 20px auto;
+    padding: 10px;
+    background-color: #f0eff2;
+    color: #000000;
+    display: flex;
+    align-items: center;
+    border-bottom: 3px solid #b4b3b6;
+}
+
+.request-list__tab {
+    margin: auto 50px;
+    text-decoration: none;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.request-list__navigation {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.request-list__nav-button--prev {
+    margin-left: 6px;
+    margin-right: auto;
+    color: #000000;
+    text-decoration: none;
+}
+
+.request-list__nav-button--prev::before {
+    content: '←';
+    margin-right: 6px;
+    font-weight: bold;
+    color: #b3b3b3;
+    text-decoration: none;
+}
+
+.request-list__month-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.calendar-icon {
+    position: absolute;
+    left: -20px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    color: #555;
+}
+
+.request-list__month-picker {
+    margin: auto;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.request-list__nav-button--next {
+    margin-left: auto;
+    margin-right: 6px;
+    color: #000000;
+    text-decoration: none;
+}
+
+.request-list__nav-button--next::after {
+    content: '→';
+    margin-right: 6px;
+    font-weight: bold;
+    color: #b3b3b3;
+    text-decoration: none;
+}
+
+.request-list__table {
+    width: 70%;
+    margin: 30px auto;
+    text-align: center;
+    border-collapse: separate;
+    border-spacing: 0 1px;
+    border-radius: 10px;
+    overflow: hidden;
+    background-color: #f0eff2;
+}
+
+.request-list__row {
+    background-color: #ffffff;
+}
+
+.request-list__row.request-list__row--header {
+    background-color: #ffffff;
+    font-weight: bold;
+    color: #000000;
+}
+
+.request-list__cell {
+    background-color: #ffffff;
+    font-size: 18px;
+}

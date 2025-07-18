@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Carbon;
 use App\Http\Controllers\Controller;
 use App\Models\Attendance;
+use Carbon\CarbonPeriod;
+
 
 class AttendanceController extends Controller
 {
@@ -93,14 +95,21 @@ class AttendanceController extends Controller
         $prevMonth = $currentMonth->copy()->subMonth()->format('Y-m');
         $nextMonth = $currentMonth->copy()->addMonth()->format('Y-m');
 
-        $attendances = Attendance::with('breaks')
-            ->where('user_id', Auth::id())
-            ->whereBetween('date', [$startOfMonth->toDateString(), $endOfMonth->toDateString()])
-            ->orderBy('date')
-            ->get();
+        $dates = CarbonPeriod::create($startOfMonth, $endOfMonth);
+
+        $attendanceList = collect();
+
+        foreach ($dates as $date) {
+            $attendance = Attendance::firstOrCreate([
+                'user_id' => Auth::id(),
+                'date' => $date->toDateString(),
+            ]);
+            $attendanceList->put($date->format('Y-m-d'), $attendance);
+        }
 
         return view('user.attendance.index', [
-            'attendances' => $attendances,
+            'attendances' => $attendanceList,
+            'dates' => $dates,
             'currentMonth' => $currentMonth,
             'prevMonth' => $prevMonth,
             'nextMonth' => $nextMonth,

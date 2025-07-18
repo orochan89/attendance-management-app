@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('css')
+    <link rel="stylesheet" href="{{ asset('css/user/correction-list.css') }}">
 @endsection
 
 @section('content')

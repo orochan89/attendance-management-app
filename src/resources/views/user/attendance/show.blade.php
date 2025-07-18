@@ -8,7 +8,8 @@
 
     <div class="staff">
         <h1 class="attendance-detail__title">勤怠詳細</h1>
-        <form class="attendance-detail__form" action="" method="POST">
+        <form class="attendance-detail__form"
+            action="{{ route('staff.attendance.request_update', ['id' => $attendance->id]) }}" method="POST">
             @csrf
             <table class="attendance-detail__table">
                 <tbody class="attendance-detail__tbody">

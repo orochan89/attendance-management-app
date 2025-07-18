@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('css')
+    <link rel="stylesheet" href="{{ asset('css/user/attendance-status.css') }}">
 @endsection
 
 @section('content')
@@ -44,19 +45,19 @@
                     @break
 
                     @case('working')
-                        <button class="status__form-button status__form-button--break" type="submit" name="action"
-                            value="start_break">
-                            休憩開始
-                        </button>
                         <button class="status__form-button status__form-button--end" type="submit" name="action" value="end_work">
                             退勤
+                        </button>
+                        <button class="status__form-button status__form-button--break" type="submit" name="action"
+                            value="start_break">
+                            休憩入
                         </button>
                     @break
 
                     @case('break')
                         <button class="status__form-button status__form-button--resume" type="submit" name="action"
                             value="resume_work">
-                            休憩終了
+                            休憩戻
                         </button>
                     @break
 
@@ -76,13 +77,20 @@
     <script>
         function updateDateTime() {
             const now = new Date();
-            const date =
-                `${now.getFullYear()}/${(now.getMonth()+1).toString().padStart(2, '0')}/${now.getDate().toString().padStart(2, '0')}`;
-            const time =
-                `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
 
-            document.querySelectorAll('.current-date').forEach(el => el.textContent = date);
-            document.querySelectorAll('.current-time').forEach(el => el.textContent = time);
+            const days = ['日', '月', '火', '水', '木', '金', '土'];
+            const year = now.getFullYear();
+            const month = now.getMonth() + 1;
+            const date = now.getDate();
+            const day = days[now.getDay()];
+            const hours = now.getHours().toString().padStart(2, '0');
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+
+            const formattedDate = `${year}年${month}月${date}日(${day})`;
+            const formattedTime = `${hours}:${minutes}`;
+
+            document.querySelectorAll('.current-date').forEach(el => el.textContent = formattedDate);
+            document.querySelectorAll('.current-time').forEach(el => el.textContent = formattedTime);
         }
 
         updateDateTime();

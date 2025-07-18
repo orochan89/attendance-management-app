@@ -9,7 +9,7 @@ use Illuminate\Routing\Controller;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
 use Laravel\Fortify\Contracts\RegisterResponse;
 use Laravel\Fortify\Contracts\RegisterViewResponse;
-use App\Http\Requests\RegisterRequest;
+use App\Http\Requests\Staff\RegisterRequest;
 
 class RegisterController extends Controller
 {

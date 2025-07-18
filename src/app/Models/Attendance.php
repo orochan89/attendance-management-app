@@ -36,7 +36,7 @@ class Attendance extends Model
         $minutes = $this->total_break_minutes;
         return $minutes > 0
             ? sprintf('%d:%02d', floor($minutes / 60), $minutes % 60)
-            : '-';
+            : null;
     }
 
     public function getWorkTimeFormattedAttribute()
@@ -48,7 +48,7 @@ class Attendance extends Model
 
             return sprintf('%d:%02d', floor($workMinutes / 60), $workMinutes % 60);
         }
-        return '-';
+        return null;
     }
 
     public function user()
