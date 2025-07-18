@@ -12,6 +12,10 @@ use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
 use Laravel\Fortify\Fortify;
+use Laravel\Fortify\Http\Controllers\RegisteredUserController;
+use App\Http\Controllers\Staff\RegisterController;
+use Laravel\Fortify\Contracts\LogoutResponse;
+use App\Actions\Fortify\CustomLogoutResponse;
 
 class FortifyServiceProvider extends ServiceProvider
 {
@@ -20,7 +24,14 @@ class FortifyServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        Fortify::ignoreRoutes();
+        $this->app->singleton(
+            RegisteredUserController::class,
+            RegisterController::class
+        );
+
+        $this->app->singleton(LoginResponse::class, CustomLoginResponse::class);
+
+        $this->app->singleton(LogoutResponse::class, CustomLogoutResponse::class);
     }
 
     /**

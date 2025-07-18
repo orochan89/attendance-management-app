@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\AttendanceCorrectionRequest;
 use App\Models\Attendance;
 use App\Models\AttendanceCorrection;
+use App\Http\Controllers\Controller;
 
 class RequestController extends Controller
 {
@@ -16,6 +17,8 @@ class RequestController extends Controller
             ->where('user_id', Auth::id())
             ->orderBy('created_at', 'desc')
             ->get();
+
+        return view('user.corrections.index', compact('corrections'));
     }
 
     public function requestUpdate(AttendanceCorrectionRequest $request, $id)

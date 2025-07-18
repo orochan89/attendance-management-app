@@ -5,11 +5,12 @@ namespace App\Http\Controllers\Staff;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Carbon;
+use App\Http\Controllers\Controller;
 use App\Models\Attendance;
 
 class AttendanceController extends Controller
 {
-    public function index()
+    public function create()
     {
         $user = Auth::user();
         $today = Carbon::today();
@@ -18,6 +19,10 @@ class AttendanceController extends Controller
             ->where('user_id', $user->id)
             ->whereDate('date', $today)
             ->first();
+
+        if (!$attendance) {
+            $attendance = new Attendance(['status' => 'off']);
+        }
 
         return view('user.attendance.create', compact('attendance'));
     }
@@ -30,7 +35,6 @@ class AttendanceController extends Controller
 
         $attendance = Attendance::firstOrCreate(
             ['user_id' => $userId, 'date' => $today],
-            ['clock_in_time' => null]
         );
 
         switch ($action) {
@@ -38,7 +42,7 @@ class AttendanceController extends Controller
                 if ($attendance->clock_in_time) {
                     return back()->withErrors(['出勤済みです']);
                 }
-                $attendance->clock_in_time = now()->toTimeString();
+                $attendance->clock_in_time = now();
                 $attendance->status = 'working';
                 break;
 
@@ -47,7 +51,7 @@ class AttendanceController extends Controller
                     return back()->withErrors(['出勤中でないため休憩できません']);
                 }
                 $attendance->breaks()->create([
-                    'break_start' => now()->toTimeString(),
+                    'break_start' => now(),
                 ]);
                 $attendance->status = 'break';
                 break;
@@ -55,7 +59,7 @@ class AttendanceController extends Controller
             case 'resume_work':
                 $lastBreak = $attendance->breaks()->latest()->first();
                 if ($lastBreak && !$lastBreak->break_end) {
-                    $lastBreak->break_end = now()->toTimeString();
+                    $lastBreak->break_end = now();
                     $lastBreak->save();
                 }
                 $attendance->status = 'working';
@@ -65,7 +69,7 @@ class AttendanceController extends Controller
                 if ($attendance->clock_out_time) {
                     return back()->withErrors(['すでに退勤済みです']);
                 }
-                $attendance->clock_out_time = now()->toTimeString();
+                $attendance->clock_out_time = now();
                 $attendance->status = 'done';
                 break;
 
@@ -109,6 +113,10 @@ class AttendanceController extends Controller
             ->where('user_id', Auth::id())
             ->findOrFail($id);
 
-        return view('user.attendance.show', compact('attendance'));
+        $correction = $attendance->attendanceCorrections()->latest()->first();
+
+        $breaks = $attendance->breaks;
+
+        return view('user.attendance.show', compact('attendance', 'correction', 'breaks'));
     }
 }

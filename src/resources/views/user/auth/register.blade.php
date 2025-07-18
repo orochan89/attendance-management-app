@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('css')
+    <link rel="stylesheet" href="{{ asset('css/auth/register.css') }}">
 @endsection
 
 @section('content')
@@ -11,7 +12,7 @@
             会員登録
         </h1>
         <div class="register__container">
-            <form class="register__form" action="" method="POST">
+            <form class="register__form" action="{{ route('register') }}" method="POST">
                 @csrf
                 <div class="register__form-group">
                     <label class="register__form-input-label" for="name">名前</label>
@@ -47,7 +48,7 @@
                 <div class="register__form-actions">
                     <button class="register__form-actions-button register__form-actions-button--submit"
                         type="submit">登録する</button>
-                    <a class="register__form-actions-link" href="{{ route('login') }}">ログインはこちら</a>
+                    <a class="register__form-actions-link" href="{{ route('login.form') }}">ログインはこちら</a>
                 </div>
             </form>
         </div>

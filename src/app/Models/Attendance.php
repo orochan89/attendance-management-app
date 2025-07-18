@@ -18,6 +18,12 @@ class Attendance extends Model
         'status'
     ];
 
+    protected $casts = [
+        'date' => 'date',
+        'clock_in_time' => 'datetime',
+        'clock_out_time' => 'datetime',
+    ];
+
     public function getTotalBreakMinutesAttribute()
     {
         return $this->breaks->sum(function ($break) {

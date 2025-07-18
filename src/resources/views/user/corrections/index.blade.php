@@ -11,10 +11,10 @@
         <div class="request-list__header">
             <div class="request-list__tabs">
                 <a class="request-list__tab {{ request('status', 'pending') === 'pending' ? 'active' : '' }}"
-                    href="{{ route('correction.index', ['status' => 'pending']) }}">
+                    href="{{ route('staff.request.list', ['status' => 'pending']) }}">
                     承認待ち
                 </a>
-                <a href="{{ route('correction.index', ['status' => 'approved']) }}"
+                <a href="{{ route('staff.request.list', ['status' => 'approved']) }}"
                     class="request-list__tab {{ request('status') === 'approved' ? 'active' : '' }}">
                     承認済み
                 </a>
@@ -50,7 +50,8 @@
                             {{ $correction->created_at->format('Y/m/d H:i') }}
                         </td>
                         <td class="request-list__cell">
-                            <a class="request-list__link" href="{{ route('correction.show', $correction->id) }}">詳細</a>
+                            <a class="request-list__link"
+                                href="{{ route('staff.attendance.show', $correction->attendance_id) }}">詳細</a>
                         </td>
                     </tr>
                 @empty

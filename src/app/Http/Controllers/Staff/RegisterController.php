@@ -2,28 +2,58 @@
 
 namespace App\Http\Controllers\Staff;
 
-use App\Http\Requests\Staff\StaffRegisterRequest;
-use App\Models\User;
 use Illuminate\Auth\Events\Registered;
+use Illuminate\Contracts\Auth\StatefulGuard;
+use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
+use Laravel\Fortify\Contracts\CreatesNewUsers;
+use Laravel\Fortify\Contracts\RegisterResponse;
+use Laravel\Fortify\Contracts\RegisterViewResponse;
+use App\Http\Requests\RegisterRequest;
 
 class RegisterController extends Controller
 {
+    /**
+     * The guard implementation.
+     *
+     * @var \Illuminate\Contracts\Auth\StatefulGuard
+     */
+    protected $guard;
 
-    public function index()
+    /**
+     * Create a new controller instance.
+     *
+     * @param  \Illuminate\Contracts\Auth\StatefulGuard
+     * @return void
+     */
+    public function __construct(StatefulGuard $guard)
     {
-        return view('user.auth.register');
+        $this->guard = $guard;
     }
 
-    public function store(StaffRegisterRequest $request)
+    /**
+     * Show the registration view.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Laravel\Fortify\Contracts\RegisterViewResponse
+     */
+    public function create(Request $request): RegisterViewResponse
     {
-        $user = User::created([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
+        return app(RegisterViewResponse::class);
+    }
 
-        event(new Registered($user));
-
-        return redirect()->route('user.login.form');
+    /**
+     * Create a new registered user.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Laravel\Fortify\Contracts\CreatesNewUsers  $creator
+     * @return \Laravel\Fortify\Contracts\RegisterResponse
+     */
+    public function store(
+        RegisterRequest $request,
+        CreatesNewUsers $creator
+    ): RegisterResponse {
+        event(new Registered($user = $creator->create($request->all())));
+        return app(RegisterResponse::class);
     }
 }

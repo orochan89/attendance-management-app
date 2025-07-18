@@ -33,7 +33,7 @@
         <div class="status__datetime status__datetime--time current-time"></div>
 
         <div class="status__actions">
-            <form class="status__form" action="{{ route('attendance.action') }}" method="POST">
+            <form class="status__form" action="{{ route('staff.attendance.action') }}" method="POST">
                 @csrf
                 @switch($attendance->status)
                     @case('off')
@@ -79,7 +79,7 @@
             const date =
                 `${now.getFullYear()}/${(now.getMonth()+1).toString().padStart(2, '0')}/${now.getDate().toString().padStart(2, '0')}`;
             const time =
-                `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}:${now.getSeconds().toString().padStart(2, '0')}`;
+                `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
 
             document.querySelectorAll('.current-date').forEach(el => el.textContent = date);
             document.querySelectorAll('.current-time').forEach(el => el.textContent = time);

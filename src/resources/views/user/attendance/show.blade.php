@@ -37,11 +37,11 @@
                         </th>
                         <td class="attendance-detail__cell">
                             <input type="time" name="clock_in_time"
-                                value="{{ old('clock_in_time', $attendance->clock_in_time->format('H:i')) }}">
+                                value="{{ old('clock_in_time', $attendance->clock_in_time ? \Carbon\Carbon::parse($attendance->clock_in_time)->format('H:i') : '') }}">
                         </td>
                         <td>
                             <input type="time" name="clock_out_time"
-                                value="{{ old('clock_out_time', $attendance->clock_out_time->format('H:i')) }}">
+                                value="{{ old('clock_out_time', $attendance->clock_out_time ? \Carbon\Carbon::parse($attendance->clock_out_time)->format('H:i') : '') }}">
                         </td>
                     </tr>
                     <tr class="attendance-detail__row">
@@ -50,11 +50,11 @@
                         </th>
                         <td class="attendance-detail__cell">
                             <input type="time" name="break1_start"
-                                value="{{ old('break1_start', $breaks[0]->break_start?->format('H:i') ?? '') }}">
+                                value="{{ old('break1_start', isset($breaks[0]) && $breaks[0]->break_start ? \Carbon\Carbon::parse($breaks[0]->break_start)->format('H:i') : '') }}">
                         </td>
                         <td class="attendance-detail__cell">
                             <input type="time" name="break1_end"
-                                value="{{ old('break1_end', $breaks[0]->break_end?->format('H:i') ?? '') }}">
+                                value="{{ old('break1_end', isset($breaks[0]) && $breaks[0]->break_end ? \Carbon\Carbon::parse($breaks[0]->break_end)->format('H:i') : '') }}">
                         </td>
                     </tr>
                     <tr class="attendance-detail__row">
@@ -63,11 +63,11 @@
                         </th>
                         <td class="attendance-detail__cell">
                             <input type="time" name="break2_start"
-                                value="{{ old('break2_start', $breaks[1]->break_start?->format('H:i') ?? '') }}">
+                                value="{{ old('break2_start', isset($breaks[1]) && $breaks[1]->break_start ? \Carbon\Carbon::parse($breaks[1]->break_start)->format('H:i') : '') }}">
                         </td>
                         <td class="attendance-detail__cell">
                             <input type="time" name="break2_end"
-                                value="{{ old('break2_end', $breaks[1]->break_end?->format('H:i') ?? '') }}">
+                                value="{{ old('break2_end', isset($breaks[1]) && $breaks[1]->break_end ? \Carbon\Carbon::parse($breaks[1]->break_end)->format('H:i') : '') }}">
                         </td>
                     </tr>
                     <tr class="attendance-detail__row">

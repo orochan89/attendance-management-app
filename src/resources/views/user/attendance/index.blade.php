@@ -10,7 +10,7 @@
         <h1 class="attendance-list__title">勤怠一覧</h1>
         <div class="attendance-list__header">
             <form class="attendance-list__navigation" action="" method="GET">
-                <a class="attendance-list__nav-button" href="{{ route('attendance.list', ['month' => $prevMonth]) }}">
+                <a class="attendance-list__nav-button" href="{{ route('staff.attendance.list', ['month' => $prevMonth]) }}">
                     前月
                 </a>
 
@@ -18,7 +18,7 @@
                     class="attendance-list__month-picker" onchange="this.form.submit()">
                 <span class="attendance-list__month-display">{{ $currentMonth->format('Y/m') }}</span>
 
-                <a class="attendance-list__nav-button" href="{{ route('attendance.list', ['month' => $nextMonth]) }}">
+                <a class="attendance-list__nav-button" href="{{ route('staff.attendance.list', ['month' => $nextMonth]) }}">
                     翌月
                 </a>
             </form>
@@ -53,7 +53,7 @@
                             {{ $attendance->work_time_formatted }}
                         </td>
                         <td class="attendance-list__cell">
-                            <a href="{{ route('attendance.show', $attendance->id) }}">詳細</a>
+                            <a href="{{ route('staff.attendance.show', $attendance->id) }}">詳細</a>
                         </td>
                     </tr>
                 @empty
