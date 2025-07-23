@@ -34,7 +34,8 @@ class RequestController extends Controller
             'status' => 'pending'
         ]);
 
-        return redirect()->route('attendance.show', $attendance->id)
-            ->with('status', '修正申請を送信しました。');
+        return redirect()->back()
+            ->with('status', '修正申請を送信しました。')
+            ->withInput();
     }
 }
