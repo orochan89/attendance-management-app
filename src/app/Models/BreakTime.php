@@ -15,12 +15,15 @@ class BreakTime extends Model
         'break_end'
     ];
 
-    public function getDurationMinutesAttribute()
+    protected $casts = [
+        'break_start' => 'datetime:H:i',
+        'break_end'   => 'datetime:H:i',
+    ];
+
+    public function getDurationMinutesAttribute(): int
     {
         if ($this->break_start && $this->break_end) {
-            $start = \Carbon\Carbon::parse($this->break_start);
-            $end = \Carbon\Carbon::parse($this->break_end);
-            return $start->diffInMinutes($end);
+            return $this->break_start->diffInMinutes($this->break_end);
         }
         return 0;
     }
@@ -28,10 +31,5 @@ class BreakTime extends Model
     public function attendance()
     {
         return $this->belongsTo(Attendance::class);
-    }
-
-    public function breakCorrections()
-    {
-        return $this->hasMany(BreakCorrection::class);
     }
 }

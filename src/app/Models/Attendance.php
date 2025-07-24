@@ -14,14 +14,13 @@ class Attendance extends Model
         'date',
         'clock_in_time',
         'clock_out_time',
-        'note',
         'status'
     ];
 
     protected $casts = [
         'date' => 'date',
-        'clock_in_time' => 'datetime',
-        'clock_out_time' => 'datetime',
+        'clock_in_time' => 'datetime:H:i',
+        'clock_out_time' => 'datetime:H:i',
     ];
 
     public function getTotalBreakMinutesAttribute()
@@ -35,8 +34,8 @@ class Attendance extends Model
     {
         $minutes = $this->total_break_minutes;
         return $minutes > 0
-            ? sprintf('%d:%02d', floor($minutes / 60), $minutes % 60)
-            : null;
+            ? sprintf('%02d:%02d', floor($minutes / 60), $minutes % 60)
+            : '00:00';
     }
 
     public function getWorkTimeFormattedAttribute()
@@ -46,9 +45,9 @@ class Attendance extends Model
             $end = \Carbon\Carbon::parse($this->clock_out_time);
             $workMinutes = $start->diffInMinutes($end) - $this->total_break_minutes;
 
-            return sprintf('%d:%02d', floor($workMinutes / 60), $workMinutes % 60);
+            return sprintf('%02d:%02d', floor($workMinutes / 60), $workMinutes % 60);
         }
-        return null;
+        return '00:00';
     }
 
     public function user()

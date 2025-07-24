@@ -27,17 +27,22 @@
                         <td class="attendance-detail__cell">{{ $attendance->date->format('n月j日') }}</td>
                     </tr>
 
-                    {{-- 出勤・退勤 --}}
                     <tr class="attendance-detail__row">
                         <th class="attendance-detail__cell attendance-detail__cell--label">出勤・退勤</th>
                         @if (is_null($correction) || $correction->status === 'approved')
                             <td class="attendance-detail__cell">
-                                <input class="attendance-detail__time-input" type="time" name="clock_in_time"
-                                    value="{{ old('clock_in_time', $attendance->clock_in_time ? \Carbon\Carbon::parse($attendance->clock_in_time)->format('H:i') : '') }}">
+                                <input class="attendance-detail__time-input" type="time" name="requested_clock_in"
+                                    value="{{ old('requested_clock_in', $attendance->clock_in_time ? \Carbon\Carbon::parse($attendance->clock_in_time)->format('H:i') : '') }}">
+                                @error('clock_in_time')
+                                    <p class="attendance-detail__error">{{ $message }}</p>
+                                @enderror
                             </td>
                             <td class="attendance-detail__cell">
-                                <input class="attendance-detail__time-input" type="time" name="clock_out_time"
-                                    value="{{ old('clock_out_time', $attendance->clock_out_time ? \Carbon\Carbon::parse($attendance->clock_out_time)->format('H:i') : '') }}">
+                                <input class="attendance-detail__time-input" type="time" name="requested_clock_out"
+                                    value="{{ old('requested_clock_out', $attendance->clock_out_time ? \Carbon\Carbon::parse($attendance->clock_out_time)->format('H:i') : '') }}">
+                                @error('clock_out_time')
+                                    <p class="attendance-detail__error">{{ $message }}</p>
+                                @enderror
                             </td>
                         @else
                             <td class="attendance-detail__cell">
@@ -49,73 +54,68 @@
                         @endif
                     </tr>
 
-                    {{-- 休憩1 --}}
-                    <tr class="attendance-detail__row">
-                        <th class="attendance-detail__cell attendance-detail__cell--label">休憩</th>
-                        @if (is_null($correction) || $correction->status === 'approved')
-                            <td class="attendance-detail__cell">
-                                <input class="attendance-detail__time-input" type="time" name="break1_start"
-                                    value="{{ old('break1_start', isset($breaks[0]) && $breaks[0]->break_start ? \Carbon\Carbon::parse($breaks[0]->break_start)->format('H:i') : '') }}">
-                            </td>
-                            <td class="attendance-detail__cell">
-                                <input class="attendance-detail__time-input" type="time" name="break1_end"
-                                    value="{{ old('break1_end', isset($breaks[0]) && $breaks[0]->break_end ? \Carbon\Carbon::parse($breaks[0]->break_end)->format('H:i') : '') }}">
-                            </td>
-                        @else
-                            <td class="attendance-detail__cell">
-                                {{ isset($breaks[0]) && $breaks[0]->break_start ? \Carbon\Carbon::parse($breaks[0]->break_start)->format('H:i') : '' }}
-                            </td>
-                            <td class="attendance-detail__cell">
-                                {{ isset($breaks[0]) && $breaks[0]->break_end ? \Carbon\Carbon::parse($breaks[0]->break_end)->format('H:i') : '' }}
-                            </td>
-                        @endif
-                    </tr>
-
-                    {{-- 休憩2（送信後に空欄なら非表示） --}}
-                    @php
-                        $submitted = count(session()->getOldInput()) > 0;
-                        $break2Start = old('break2_start');
-                        $break2End = old('break2_end');
-
-                        // 休憩2表示条件：送信してない または どちらか入力されている または DBにデータがある
-                        $showBreak2 =
-                            !$submitted ||
-                            $break2Start ||
-                            $break2End ||
-                            (isset($breaks[1]) && ($breaks[1]->break_start || $breaks[1]->break_end));
-                    @endphp
-
-                    @if ($showBreak2)
+                    {{-- 休憩欄 --}}
+                    @foreach ($breaks as $index => $break)
                         <tr class="attendance-detail__row">
-                            <th class="attendance-detail__cell attendance-detail__cell--label">休憩2</th>
+                            <th class="attendance-detail__cell attendance-detail__cell--label">休憩{{ $index + 1 }}</th>
                             @if (is_null($correction) || $correction->status === 'approved')
                                 <td class="attendance-detail__cell">
-                                    <input class="attendance-detail__time-input" type="time" name="break2_start"
-                                        value="{{ old('break2_start', isset($breaks[1]) && $breaks[1]->break_start ? \Carbon\Carbon::parse($breaks[1]->break_start)->format('H:i') : '') }}">
+                                    <input class="attendance-detail__time-input" type="time"
+                                        name="break{{ $index + 1 }}_start"
+                                        value="{{ old('break' . ($index + 1) . '_start', $break->break_start ? \Carbon\Carbon::parse($break->break_start)->format('H:i') : '') }}">
+                                    @error('break' . ($index + 1) . '_start')
+                                        <p class="attendance-detail__error">{{ $message }}</p>
+                                    @enderror
                                 </td>
                                 <td class="attendance-detail__cell">
-                                    <input class="attendance-detail__time-input" type="time" name="break2_end"
-                                        value="{{ old('break2_end', isset($breaks[1]) && $breaks[1]->break_end ? \Carbon\Carbon::parse($breaks[1]->break_end)->format('H:i') : '') }}">
+                                    <input class="attendance-detail__time-input" type="time"
+                                        name="break{{ $index + 1 }}_end"
+                                        value="{{ old('break' . ($index + 1) . '_end', $break->break_end ? \Carbon\Carbon::parse($break->break_end)->format('H:i') : '') }}">
+                                    @error('break' . ($index + 1) . '_end')
+                                        <p class="attendance-detail__error">{{ $message }}</p>
+                                    @enderror
                                 </td>
                             @else
                                 <td class="attendance-detail__cell">
-                                    {{ isset($breaks[1]) && $breaks[1]->break_start ? \Carbon\Carbon::parse($breaks[1]->break_start)->format('H:i') : '' }}
+                                    {{ $break->break_start ? \Carbon\Carbon::parse($break->break_start)->format('H:i') : '' }}
                                 </td>
                                 <td class="attendance-detail__cell">
-                                    {{ isset($breaks[1]) && $breaks[1]->break_end ? \Carbon\Carbon::parse($breaks[1]->break_end)->format('H:i') : '' }}
+                                    {{ $break->break_end ? \Carbon\Carbon::parse($break->break_end)->format('H:i') : '' }}
                                 </td>
                             @endif
                         </tr>
-                    @endif
+                    @endforeach
 
-                    {{-- 備考 --}}
+                    <tr class="attendance-detail__row">
+                        <th class="attendance-detail__cell attendance-detail__cell--label">休憩{{ count($breaks) + 1 }}</th>
+                        <td class="attendance-detail__cell">
+                            <input class="attendance-detail__time-input" type="time"
+                                name="break{{ count($breaks) + 1 }}_start"
+                                value="{{ old('break' . (count($breaks) + 1) . '_start') }}">
+                            @error('break' . (count($breaks) + 1) . '_start')
+                                <p class="attendance-detail__error">{{ $message }}</p>
+                            @enderror
+                        </td>
+                        <td class="attendance-detail__cell">
+                            <input class="attendance-detail__time-input" type="time"
+                                name="break{{ count($breaks) + 1 }}_end"
+                                value="{{ old('break' . (count($breaks) + 1) . '_end') }}">
+                            @error('break' . (count($breaks) + 1) . '_end')
+                                <p class="attendance-detail__error">{{ $message }}</p>
+                            @enderror
+                        </td>
+                    </tr>
+
                     <tr class="attendance-detail__row">
                         <th class="attendance-detail__cell attendance-detail__cell--label">備考</th>
                         <td class="attendance-detail__cell" colspan="2">
                             @if (is_null($correction) || $correction->status === 'approved')
-                                <textarea class="attendance-detail__textarea" name="note" rows="3">{{ old('note', $attendance->note) }}</textarea>
+                                <textarea class="attendance-detail__textarea" name="reason" rows="3">{{ old('reason', $attendance->reason) }}</textarea>
+                                @error('reason')
+                                    <p class="attendance-detail__error">{{ $message }}</p>
+                                @enderror
                             @else
-                                <p class="attendance-detail__readonly-text">{{ $attendance->note ?? '' }}</p>
+                                <p class="attendance-detail__readonly-text">{{ $attendance->reason ?? '' }}</p>
                             @endif
                         </td>
                     </tr>

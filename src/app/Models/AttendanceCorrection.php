@@ -9,6 +9,9 @@ class AttendanceCorrection extends Model
 {
     use HasFactory;
 
+    const STATUS_PENDING  = 'pending';
+    const STATUS_APPROVED = 'approved';
+
     protected $fillable = [
         'user_id',
         'attendance_id',
@@ -18,6 +21,12 @@ class AttendanceCorrection extends Model
         'status',
         'reviewed_by',
         'reviewed_at'
+    ];
+
+    protected $casts = [
+        'requested_clock_in'  => 'datetime:H:i',
+        'requested_clock_out' => 'datetime:H:i',
+        'reviewed_at'         => 'datetime',
     ];
 
     public function user()
