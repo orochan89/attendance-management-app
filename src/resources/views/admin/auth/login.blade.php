@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('css')
+    <link rel="stylesheet" href="{{ asset('css/auth/admin-auth.css') }}">
 @endsection
 
 @section('content')
@@ -30,7 +31,7 @@
                 @enderror
                 <div class="login__form-actions">
                     <button class="login__form-actions-button login__form-actions-button--submit"
-                        type="submit">ログインする</button>
+                        type="submit">管理者ログインする</button>
                 </div>
             </form>
         </div>

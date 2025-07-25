@@ -8,11 +8,11 @@
                 <nav class="header__nav">
                     <ul class="header__nav-list">
                         @if (Auth::check() && Auth::user()->role === 'admin')
-                            <li class="header__nav-item"><a href="{{ route('admin.attendance.index') }}"
+                            <li class="header__nav-item"><a href="{{ route('admin.attendance.list') }}"
                                     class="header__nav-link">勤怠一覧</a></li>
-                            <li class="header__nav-item"><a href="{{ route('admin.staff.index') }}"
+                            <li class="header__nav-item"><a href="{{ route('admin.staff.list') }}"
                                     class="header__nav-link">スタッフ一覧</a></li>
-                            <li class="header__nav-item"><a href="{{ route('admin.requests.index') }}"
+                            <li class="header__nav-item"><a href="{{ route('admin.request.list') }}"
                                     class="header__nav-link">申請一覧</a></li>
                         @elseif (Auth::check() && Auth::user()->role === 'staff')
                             <li class="header__nav-item"><a href="{{ route('staff.attendance.create') }}"

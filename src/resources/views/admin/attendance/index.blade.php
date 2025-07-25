@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('css')
+    <link rel="stylesheet" href="{{ asset('css/admin/attendance-list.css') }}">
 @endsection
 
 @section('content')
@@ -19,7 +20,7 @@
         <div class="attendance-list__header">
             <form class="attendance-list__navigation" action="" method="GET">
 
-                <a class="attendance-list__nav-button" href="{{ route('admin.attendance.index', ['date' => $prevDate]) }}">
+                <a class="attendance-list__nav-button" href="{{ route('admin.attendance.list', ['date' => $prevDate]) }}">
                     前日
                 </a>
 
@@ -27,7 +28,7 @@
                     class="attendance-list__date-picker" onchange="this.form.submit()">
                 <span class="attendance-list__date-display">{{ $currentDate->format('Y年n月j日') }}</span>
 
-                <a class="attendance-list__nav-button" href="{{ route('admin.attendance.index', ['date' => $nextDate]) }}">
+                <a class="attendance-list__nav-button" href="{{ route('admin.attendance.list', ['date' => $nextDate]) }}">
                     翌日
                 </a>
             </form>

@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('css')
+    <link rel="stylesheet" href="{{ asset('css/admin/staff-attendance-list.css') }}">
 @endsection
 
 @section('content')
@@ -8,7 +9,7 @@
 
     <div class="admin">
         <h1 class="attendance-list__title">
-            {{ $user->name }}さんの{{ $currentMonth->format('Y月n月') }}勤怠
+            {{ $user->name }}さんの勤怠
         </h1>
         <div class="attendance-list__header">
             <form class="attendance-list__navigation" action="" method="GET">
@@ -19,16 +20,15 @@
                 @endphp
 
                 <a class="attendance-list__nav-button"
-                    href="{{ route('admin.staff.attendances', ['user' => $user->id, 'month' => $prevMonth]) }}">
+                    href="{{ route('admin.staff.attendance', ['id' => $user->id, 'month' => $prevMonth]) }}">
                     前月
                 </a>
 
                 <input type="month" name="month" value="{{ $currentMonth->format('Y-m') }}"
                     class="attendance-list__month-picker" onchange="this.form.submit()">
-                <span class="attendance-list__month-display">{{ $currentMonth->format('Y/m') }}</span>
 
                 <a class="attendance-list__nav-button"
-                    href="{ route('admin.staff.attendances', ['user' => $user->id, 'month' => $nextMonth]) }}">
+                    href="{{ route('admin.staff.attendance', ['id' => $user->id, 'month' => $nextMonth]) }}">
                     翌月
                 </a>
             </form>
@@ -88,7 +88,7 @@
                             {{ $workFormatted }}
                         </td>
                         <td class="attendance-list__cell">
-                            <a href="{{ route('attendance.show', $attendance->id) }}">詳細</a>
+                            <a href="{{ route('admin.attendance.show', $attendance->id) }}">詳細</a>
                         </td>
                     </tr>
                 @empty

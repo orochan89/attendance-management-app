@@ -53,14 +53,13 @@ Route::middleware('auth')->group(function () {
 
 Route::prefix('admin')->name('admin.')->group(function () {
 
-    Route::middleware('guest:admin')->group(function () {
-
-        Route::get('/login', [AdminAuthController::class, 'index'])->name('login.form');
+    Route::middleware('guest')->group(function () {
+        Route::get('/login', [AdminAuthController::class, 'create'])->name('login.form');
         Route::post('/login', [AdminAuthController::class, 'store'])->name('login.submit');
     });
 
-    Route::middleware('auth:admin')->group(function () {
-
+    // auth に変更し、role=adminをミドルウェアでチェック
+    Route::middleware(['auth', 'admin'])->group(function () {
         Route::get('/attendance/list', [AdminAttendanceController::class, 'index'])->name('attendance.list');
 
         Route::get('/attendance/{id}', [AdminAttendanceController::class, 'show'])->name('attendance.show');
@@ -69,7 +68,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/staff/list', [StaffController::class, 'index'])->name('staff.list');
         Route::get('/attendance/staff/{id}', [StaffAttendanceController::class, 'show'])->name('staff.attendance');
 
-        Route::get('/stamp_correction_request/list', [StaffAttendanceController::class, 'index'])->name('request.list');
+        Route::get('/stamp_correction_request/list', [AttendanceApprovalController::class, 'index'])->name('request.list');
 
         Route::get('/stamp_correction_request/approve/{attendance_correct_request}', [AttendanceApprovalController::class, 'show'])->name('request.approve.show');
         Route::post('/stamp_correction_request/approve/{attendance_correct_request}', [AttendanceApprovalController::class, 'approve'])->name('request.approve.submit');

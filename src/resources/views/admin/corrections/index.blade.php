@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('css')
+    <link rel="stylesheet" href="{{ asset('css/admin/correction-list.css') }}">
 @endsection
 
 @section('content')
@@ -11,11 +12,10 @@
         <div class="request-list__header">
             <div class="request-list__tabs">
                 <a class="request-list__tab {{ request('status', 'pending') === 'pending' ? 'active' : '' }}"
-                    href="{{ route('admin.correction.index', ['status' => 'pending']) }}">
+                    href="{{ route('admin.request.list', ['status' => 'pending']) }}">
                     承認待ち
                 </a>
-                <a class="request-list__tab {{ request('status') === 'approved' ? 'active' : '' }}"
-                    href="{{ route('admin.correction.index', ['status' => 'approved']) }}"
+                <a href="{{ route('admin.request.list', ['status' => 'approved']) }}"
                     class="request-list__tab {{ request('status') === 'approved' ? 'active' : '' }}">
                     承認済み
                 </a>
@@ -51,9 +51,8 @@
                             {{ $correction->created_at->format('Y/m/d H:i') }}
                         </td>
                         <td class="request-list__cell">
-                            <a class="request-list__link" href="{{ route('admin.correction.show', $correction->id) }}">
-                                詳細
-                            </a>
+                            <a class="request-list__link"
+                                href="{{ route('admin.request.approve.show', $correction->id) }}">詳細</a>
                         </td>
                     </tr>
                 @empty

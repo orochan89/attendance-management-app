@@ -40,15 +40,18 @@
 }
 
 .header__nav-item {
+    padding: auto;
     list-style: none;
     margin-left: 16px;
 }
 
 .header__nav-link {
+    font-size: 16px;
     color: #ffffff;
     text-decoration: none;
     padding: 8px 12px;
     display: inline-block;
+    white-space: nowrap;
 
 }
 
@@ -57,11 +60,13 @@
 }
 
 .header__nav-logout-button {
+    font-size: 16px;
     border: none;
     background-color: transparent;
     color: #ffffff;
     cursor: pointer;
     margin-right: 10px;
+    white-space: nowrap;
 }
 
 .header__nav-login {
@@ -69,6 +74,8 @@
 }
 
 .header__nav-login-button {
+    font-size: 18px;
+    font-weight: normal;
     border: none;
     background-color: transparent;
     color: #ffffff;

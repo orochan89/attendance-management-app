@@ -6,6 +6,7 @@ use Illuminate\Contracts\Auth\StatefulGuard;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Routing\Pipeline;
+use Illuminate\Support\Facades\Auth;
 use Laravel\Fortify\Actions\AttemptToAuthenticate;
 use Laravel\Fortify\Actions\CanonicalizeUsername;
 use Laravel\Fortify\Actions\EnsureLoginIsNotThrottled;
@@ -16,7 +17,7 @@ use Laravel\Fortify\Contracts\LoginViewResponse;
 use Laravel\Fortify\Contracts\LogoutResponse;
 use Laravel\Fortify\Features;
 use Laravel\Fortify\Fortify;
-use App\Http\Requests\LoginRequest;
+use App\Http\Requests\Admin\AdminLoginRequest;
 
 class AuthenticationController extends Controller
 {
@@ -44,9 +45,9 @@ class AuthenticationController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Laravel\Fortify\Contracts\LoginViewResponse
      */
-    public function create(Request $request): LoginViewResponse
+    public function create(Request $request)
     {
-        return app(LoginViewResponse::class);
+        return view('admin.auth.login');
     }
 
     /**
@@ -55,20 +56,24 @@ class AuthenticationController extends Controller
      * @param  \App\Http\Requests\LoginRequest  $request
      * @return mixed
      */
-    public function store(LoginRequest $request)
+    public function store(AdminLoginRequest $request)
     {
-        return $this->loginPipeline($request)->then(function ($request) {
-            return app(LoginResponse::class);
-        });
-    }
+        $credentials = $request->only('email', 'password');
 
+        if (Auth::attempt(array_merge($credentials, ['role' => 'admin']))) {
+            $request->session()->regenerate();
+            return redirect()->intended(route('admin.attendance.list'));
+        }
+
+        return back()->withErrors(['email' => '管理者用の認証に失敗しました。']);
+    }
     /**
      * Get the authentication pipeline instance.
      *
      * @param  \App\Http\Requests\LoginRequest  $request  $request
      * @return \Illuminate\Pipeline\Pipeline
      */
-    protected function loginPipeline(LoginRequest $request)
+    protected function loginPipeline(AdminLoginRequest $request)
     {
         if (Fortify::$authenticateThroughCallback) {
             return (new Pipeline(app()))->send($request)->through(array_filter(
@@ -86,6 +91,7 @@ class AuthenticationController extends Controller
             config('fortify.limiters.login') ? null : EnsureLoginIsNotThrottled::class,
             config('fortify.lowercase_usernames') ? CanonicalizeUsername::class : null,
             Features::enabled(Features::twoFactorAuthentication()) ? RedirectIfTwoFactorAuthenticatable::class : null,
+            \App\Actions\Admin\EnsureAdminRole::class,
             AttemptToAuthenticate::class,
             PrepareAuthenticatedSession::class,
         ]));

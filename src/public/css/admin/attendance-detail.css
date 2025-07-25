@@ -1,0 +1,106 @@
+body {
+    background-color: #f0eff2;
+}
+
+.admin {
+    width: 100vw;
+    min-height: 90vh;
+}
+
+.attendance-detail__title {
+    width: 70%;
+    height: auto;
+    margin: 40px auto 30px auto;
+    padding-left: 20px;
+    font-size: 24px;
+    color: black;
+    border-left: 5px solid #000000;
+}
+
+.attendance-detail__table {
+    width: 70%;
+    margin: 30px auto;
+    text-align: center;
+    border-collapse: separate;
+    border-spacing: 0 1px;
+    border-radius: 10px;
+    overflow: hidden;
+    background-color: #f0eff2;
+}
+
+.attendance-detail__row {
+    background-color: #ffffff;
+}
+
+.attendance-detail__cell.attendance-detail__cell--label {
+    width: 30%;
+    padding: 20px 0;
+    background-color: #ffffff;
+    font-size: 18px;
+    font-weight: bold;
+    color: #000000;
+}
+
+.attendance-detail__cell {
+    width: 35%;
+    background-color: #ffffff;
+    font-size: 18px;
+}
+
+
+.attendance-detail__time-input {
+    width: 110px;
+    height: 40px;
+    padding: 0 10px;
+    font-size: 15px;
+    font-weight: bold;
+    text-align: center;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    box-sizing: border-box;
+    appearance: none;
+}
+
+.attendance-detail__textarea {
+    width: 65%;
+    height: 60px;
+    padding: 10px 12px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    resize: none;
+    box-sizing: border-box;
+}
+
+.attendance-detail__error {
+    font-size: 12px;
+    color: red;
+}
+
+.attendance-detail__actions {
+    width: 70%;
+    margin: 20px auto;
+    text-align: right;
+}
+
+.attendance-detail__button--submit {
+    background-color: #000000;
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 10px 32px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    display: inline-block;
+    transition: background-color 0.3s ease;
+}
+
+.attendance-detail__button--submit:hover {
+    background-color: #333333;
+}
+
+.attendance-detail__message.attendance-detail__message--alert{
+    font-size: 18px;
+    color: red;
+}
