@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\Staff\AttendanceCorrectionRequest;
 use App\Models\Attendance;
 use App\Models\AttendanceCorrection;
+use App\Models\BreakCorrection;
 use App\Http\Controllers\Controller;
 
 class RequestController extends Controller
@@ -46,9 +47,7 @@ class RequestController extends Controller
             }
         }
 
-        return redirect()->back()
-            ->with('status', '修正申請を送信しました。')
-            ->withInput();
+        return redirect()->route('staff.attendance.show', ['id' => $id]);
     }
 
     /**

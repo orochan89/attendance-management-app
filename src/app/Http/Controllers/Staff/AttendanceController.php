@@ -118,13 +118,18 @@ class AttendanceController extends Controller
 
     public function show($id)
     {
-        $attendance = Attendance::with(['breaks', 'attendanceCorrections'])->findOrFail($id);
+        $attendance = Attendance::with('breaks')->findOrFail($id);
 
         if ($attendance->user_id !== Auth::id()) {
             abort(403, 'この勤怠情報にアクセスする権限がありません。');
         }
 
-        $correction = $attendance->attendanceCorrections->sortByDesc('created_at')->first();
+        // 最新の修正申請とその休憩修正を取得
+        $correction = $attendance->attendanceCorrections()
+            ->with('breakCorrections')
+            ->latest()
+            ->first();
+
         $breaks = $attendance->breaks;
 
         return view('user.attendance.show', compact('attendance', 'correction', 'breaks'));
