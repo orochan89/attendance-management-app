@@ -16,6 +16,7 @@ use Laravel\Fortify\Http\Controllers\RegisteredUserController;
 use App\Http\Controllers\Staff\RegisterController;
 use Laravel\Fortify\Contracts\LogoutResponse;
 use App\Actions\Fortify\CustomLogoutResponse;
+use App\Actions\Fortify\CustomRegisterResponse;
 
 class FortifyServiceProvider extends ServiceProvider
 {
@@ -28,6 +29,8 @@ class FortifyServiceProvider extends ServiceProvider
             RegisteredUserController::class,
             RegisterController::class
         );
+
+        $this->app->singleton(RegisterResponse::class, CustomRegisterResponse::class);
 
         $this->app->singleton(LoginResponse::class, CustomLoginResponse::class);
 

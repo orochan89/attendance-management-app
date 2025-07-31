@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Staff;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
 class StaffLoginRequest extends FormRequest
 {
@@ -29,13 +30,25 @@ class StaffLoginRequest extends FormRequest
         ];
     }
 
-    public function messages()
+    public function messages(): array
     {
-        return [
-            'email.required' => 'メールアドレスを入力してください。',
-            'email.email' => '正しいメールアドレスを入力してください。',
-            'password.required' => 'パスワードを入力してください。',
-            'password.min' => 'パスワードは8文字以上で入力してください。',
+        $messages = [
+            'email.required' => 'メールアドレスを入力してください',
+            'email.email' => 'メールアドレスの形式で入力してください',
+            'password.required' => 'パスワードを入力してください',
+            'password.string' => 'パスワードは文字列で入力してください',
+            'password.min' => 'パスワードは8文字以上で入力してください',
         ];
+
+        return $messages;
+    }
+
+    public function withValidator($validator)
+    {
+        $validator->after(function ($validator) {
+            if (!Auth::attempt($this->only('email', 'password'))) {
+                $validator->errors()->add('email', 'ログイン情報が登録されていません');
+            }
+        });
     }
 }

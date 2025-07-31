@@ -12,7 +12,7 @@
             管理者ログイン
         </h1>
         <div class="login__container">
-            <form class="login__form" action="" method="POST">
+            <form class="login__form" action="" method="POST" novalidate>
                 @csrf
                 <div class="login__form-group">
                     <label class="login__form-input-label" for="email">メールアドレス</label>

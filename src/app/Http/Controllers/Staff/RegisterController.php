@@ -54,6 +54,7 @@ class RegisterController extends Controller
         CreatesNewUsers $creator
     ): RegisterResponse {
         event(new Registered($user = $creator->create($request->all())));
+        $this->guard->login($user);
         return app(RegisterResponse::class);
     }
 }

@@ -12,7 +12,7 @@
             会員登録
         </h1>
         <div class="register__container">
-            <form class="register__form" action="{{ route('register') }}" method="POST">
+            <form class="register__form" action="{{ route('register') }}" method="POST" novalidate>
                 @csrf
                 <div class="register__form-group">
                     <label class="register__form-input-label" for="name">名前</label>
