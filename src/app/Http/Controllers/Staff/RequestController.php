@@ -12,10 +12,17 @@ use App\Http\Controllers\Controller;
 
 class RequestController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        $status = $request->input('status', 'pending');
+
+        if (!in_array($status, ['pending', 'approved'])) {
+            abort(404); // または redirect()->back();
+        }
+
         $corrections = AttendanceCorrection::with('attendance')
             ->where('user_id', Auth::id())
+            ->where('status', $status)
             ->orderBy('created_at', 'desc')
             ->get();
 

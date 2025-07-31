@@ -10,21 +10,24 @@
     <div class="staff">
         <h1 class="attendance-list__title">勤怠一覧</h1>
         <div class="attendance-list__header">
-            <form class="attendance-list__navigation" action="" method="GET">
+            <div class="attendance-list__navigation">
                 <a class="attendance-list__nav-button--prev"
                     href="{{ route('staff.attendance.list', ['month' => $prevMonth]) }}">
                     前月
                 </a>
+
                 <div class="attendance-list__month-wrapper">
                     <i class="fas fa-calendar-alt calendar-icon"></i>
-                    <input type="month" name="month" value="{{ $currentMonth->format('Y-m') }}"
-                        class="attendance-list__month-picker" onchange="this.form.submit()">
+                    <p class="attendance-list__month-text">
+                        {{ $currentMonth->format('Y年n月') }}
+                    </p>
                 </div>
+
                 <a class="attendance-list__nav-button--next"
                     href="{{ route('staff.attendance.list', ['month' => $nextMonth]) }}">
                     翌月
                 </a>
-            </form>
+            </div>
         </div>
         <table class="attendance-list__table">
             <thead class="attendance-list__thead">

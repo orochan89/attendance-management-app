@@ -34,6 +34,11 @@ body {
     text-decoration: none;
     font-size: 18px;
     font-weight: bold;
+    color: #000000;
+}
+
+.request-list__tab:visited {
+    color: black;
 }
 
 .request-list__navigation {
