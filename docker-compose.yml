@@ -38,7 +38,7 @@ services:
     ports:
       - 8080:80
 
-  mail:
+  mailhog:
     image: mailhog/mailhog
     container_name: mailhog_attendance-management-app
     ports:

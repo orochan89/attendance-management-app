@@ -2,7 +2,10 @@
 
 use Illuminate\Support\Facades\Route;
 
+use Laravel\Fortify\Http\Controllers\EmailVerificationNotificationController;
+
 use App\Http\Controllers\Staff\RegisterController;
+use App\Http\Controllers\Staff\EmailVerificationPromptController;
 use App\Http\Controllers\Staff\RequestController;
 use App\Http\Controllers\Staff\AttendanceController as UserAttendanceController;
 use App\Http\Controllers\Staff\AuthenticationController as UserAuthController;
@@ -24,6 +27,10 @@ use App\Http\Controllers\Admin\AttendanceApprovalController;
 |
 */
 
+Route::get('/', function () {
+    return redirect('/login');
+});
+
 Route::middleware('guest')->group(function () {
     Route::get('/register', [RegisterController::class, 'create'])->name('register.form');
     Route::post('/register', [RegisterController::class, 'store'])->name('register');
@@ -32,8 +39,16 @@ Route::middleware('guest')->group(function () {
     Route::post('/login', [UserAuthController::class, 'store'])->name('login');
 });
 
+Route::middleware(['auth'])->group(function () {
+    Route::get('/email/verify', EmailVerificationPromptController::class)
+        ->name('verification.notice');
 
-Route::middleware('auth')->group(function () {
+    Route::post('/email/verification-notification', [EmailVerificationNotificationController::class, 'store'])
+        ->middleware('throttle:6,1')
+        ->name('verification.send');
+});
+
+Route::middleware('auth', 'verified')->group(function () {
 
     Route::post('/logout', [UserAuthController::class, 'destroy'])->name('logout');
 

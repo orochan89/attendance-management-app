@@ -8,6 +8,6 @@ class CustomRegisterResponse implements RegisterResponse
 {
     public function toResponse($request)
     {
-        return redirect('/attendance');
+        return redirect()->route('verification.notice');
     }
 }
