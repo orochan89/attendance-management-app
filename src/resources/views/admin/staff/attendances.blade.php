@@ -24,8 +24,12 @@
                     前月
                 </a>
 
-                <input type="month" name="month" value="{{ $currentMonth->format('Y-m') }}"
-                    class="attendance-list__month-picker" onchange="this.form.submit()">
+                <div class="attendance-list__month-wrapper">
+                    <i class="fas fa-calendar-alt calendar-icon"></i>
+                    <p class="attendance-list__month-text">
+                        {{ $currentMonth->format('Y年n月') }}
+                    </p>
+                </div>
 
                 <a class="attendance-list__nav-button"
                     href="{{ route('admin.staff.attendance', ['id' => $user->id, 'month' => $nextMonth]) }}">
@@ -98,5 +102,12 @@
                 @endforelse
             </tbody>
         </table>
+
+        <div class="attendance-list__csv-action">
+            <a class="attendance-list__csv-button"
+                href="{{ route('admin.staff.attendance.csv', ['id' => $user->id, 'month' => $currentMonth->format('Y-m')]) }}">
+                CSV出力
+            </a>
+        </div>
     </div>
 @endsection

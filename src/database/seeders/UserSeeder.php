@@ -20,18 +20,21 @@ class UserSeeder extends Seeder
             'name' => '管理者',
             'email' => 'admin@example.com',
             'password' => Hash::make('password'),
-            'role' => 'admin'
+            'role' => 'admin',
+            'email_verified_at' => now(),
         ]);
 
         User::create([
             'name' => 'テストユーザー',
             'email' => 'test@example.com',
             'password' => Hash::make('password'),
-            'role' => 'staff'
+            'role' => 'staff',
+            'email_verified_at' => now(),
         ]);
 
         User::factory()->count(10)->create([
-            'role' => 'staff'
+            'role' => 'staff',
+            'email_verified_at' => now(),
         ]);
     }
 }

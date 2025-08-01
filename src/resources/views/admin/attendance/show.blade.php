@@ -8,7 +8,7 @@
     @include('components.nav')
 
     <div class="admin">
-        <h1 class="attendance-detail__title">勤怠詳細（管理者用）</h1>
+        <h1 class="attendance-detail__title">勤怠詳細</h1>
         <form class="attendance-detail__form" action="{{ route('admin.attendance.update', ['id' => $attendance->id]) }}"
             method="POST">
             @csrf
@@ -36,10 +36,16 @@
                         <td class="attendance-detail__cell">
                             <input class="attendance-detail__time-input" type="time" name="clock_in_time"
                                 value="{{ old('clock_in_time', $attendance->clock_in_time ? \Carbon\Carbon::parse($attendance->clock_in_time)->format('H:i') : '') }}">
+                            @error('clock_in_time')
+                                <div class="attendance-detail__error">{{ $message }}</div>
+                            @enderror
                         </td>
                         <td class="attendance-detail__cell">
                             <input class="attendance-detail__time-input" type="time" name="clock_out_time"
                                 value="{{ old('clock_out_time', $attendance->clock_out_time ? \Carbon\Carbon::parse($attendance->clock_out_time)->format('H:i') : '') }}">
+                            @error('clock_out_time')
+                                <div class="attendance-detail__error">{{ $message }}</div>
+                            @enderror
                         </td>
                     </tr>
 
@@ -53,11 +59,17 @@
                                 <input class="attendance-detail__time-input" type="time"
                                     name="breaks[{{ $index }}][start]"
                                     value="{{ old('breaks.' . $index . '.start', $break->break_start ? \Carbon\Carbon::parse($break->break_start)->format('H:i') : '') }}">
+                                @error("breaks.$index.start")
+                                    <div class="attendance-detail__error">{{ $message }}</div>
+                                @enderror
                             </td>
                             <td class="attendance-detail__cell">
                                 <input class="attendance-detail__time-input" type="time"
                                     name="breaks[{{ $index }}][end]"
                                     value="{{ old('breaks.' . $index . '.end', $break->break_end ? \Carbon\Carbon::parse($break->break_end)->format('H:i') : '') }}">
+                                @error("breaks.$index.end")
+                                    <div class="attendance-detail__error">{{ $message }}</div>
+                                @enderror
                             </td>
                         </tr>
                     @endforeach
@@ -70,11 +82,17 @@
                         <td class="attendance-detail__cell">
                             <input class="attendance-detail__time-input" type="time"
                                 name="breaks[{{ count($breaks) }}][start]" value="">
+                            @error('breaks.' . count($breaks) . '.start')
+                                <div class="attendance-detail__error">{{ $message }}</div>
+                            @enderror
                         </td>
                         <td class="attendance-detail__cell">
                             <input class="attendance-detail__time-input" type="time"
                                 name="breaks[{{ count($breaks) }}][end]" value="">
                         </td>
+                        @error('breaks.' . count($breaks) . '.end')
+                            <div class="attendance-detail__error">{{ $message }}</div>
+                        @enderror
                     </tr>
 
                     {{-- 備考 --}}
@@ -82,6 +100,9 @@
                         <th class="attendance-detail__cell attendance-detail__cell--label">備考</th>
                         <td class="attendance-detail__cell" colspan="2">
                             <textarea class="attendance-detail__textarea" name="reason" rows="3">{{ old('reason', $attendance->reason) }}</textarea>
+                            @error('reason')
+                                <div class="attendance-detail__error">{{ $message }}</div>
+                            @enderror
                         </td>
                     </tr>
                 </tbody>

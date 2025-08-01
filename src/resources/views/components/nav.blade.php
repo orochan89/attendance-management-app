@@ -24,9 +24,13 @@
                         @endif
                         <li class="header__nav-item">
                             @auth
-                                <form class="header__nav-logout" action="{{ route('logout') }}" method="post">
-                                    @csrf
-                                    <button class="header__nav-logout-button" type="submit">ログアウト</button>
+                                @if (Auth::user()->role === 'admin')
+                                    <form class="header__nav-logout" action="{{ route('admin.logout') }}" method="post">
+                                    @else
+                                        <form class="header__nav-logout" action="{{ route('logout') }}" method="post">
+                                @endif
+                                @csrf
+                                <button class="header__nav-logout-button" type="submit">ログアウト</button>
                                 </form>
                             @endauth
                             @guest

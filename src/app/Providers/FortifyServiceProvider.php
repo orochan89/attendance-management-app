@@ -8,6 +8,7 @@ use App\Actions\Fortify\UpdateUserPassword;
 use App\Actions\Fortify\UpdateUserProfileInformation;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
@@ -15,8 +16,10 @@ use Laravel\Fortify\Fortify;
 use Laravel\Fortify\Http\Controllers\RegisteredUserController;
 use App\Http\Controllers\Staff\RegisterController;
 use Laravel\Fortify\Contracts\LogoutResponse;
-use App\Actions\Fortify\CustomLogoutResponse;
-use App\Actions\Fortify\CustomRegisterResponse;
+use App\Http\Responses\CustomRegisterResponse;
+use App\Http\Responses\UserLogoutResponse;
+use App\Http\Responses\AdminLogoutResponse;
+
 
 class FortifyServiceProvider extends ServiceProvider
 {
@@ -34,7 +37,13 @@ class FortifyServiceProvider extends ServiceProvider
 
         $this->app->singleton(LoginResponse::class, CustomLoginResponse::class);
 
-        $this->app->singleton(LogoutResponse::class, CustomLogoutResponse::class);
+        $this->app->bind(LogoutResponse::class, function () {
+            if (request()->is('admin/*')) {
+                return new \App\Http\Responses\AdminLogoutResponse();
+            }
+
+            return new \App\Http\Responses\UserLogoutResponse();
+        });
     }
 
     /**

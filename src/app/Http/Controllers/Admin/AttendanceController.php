@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\AdminUpdateAttendanceRequest;
 use Illuminate\Http\Request;
 use App\Models\Attendance;
 use Carbon\Carbon;
@@ -35,7 +36,7 @@ class AttendanceController extends Controller
         return view('admin.attendance.show', compact('attendance', 'breaks'));
     }
 
-    public function update(Request $request, $id)
+    public function update(AdminUpdateAttendanceRequest $request, $id)
     {
         $attendance = Attendance::with('breaks')->findOrFail($id);
 

@@ -24,9 +24,13 @@
                     前日
                 </a>
 
-                <input type="date" name="date" value="{{ $currentDate->format('Y-m-d') }}"
-                    class="attendance-list__date-picker" onchange="this.form.submit()">
-                <span class="attendance-list__date-display">{{ $currentDate->format('Y年n月j日') }}</span>
+
+                <div class="attendance-list__date-wrapper">
+                    <i class="fas fa-calendar-alt calendar-icon"></i>
+                    <p class="attendance-list__date-text">
+                        {{ $currentDate->format('Y年n月j日') }}
+                    </p>
+                </div>
 
                 <a class="attendance-list__nav-button" href="{{ route('admin.attendance.list', ['date' => $nextDate]) }}">
                     翌日

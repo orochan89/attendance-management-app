@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Actions\Fortify;
+namespace App\Http\Responses;
 
 use Laravel\Fortify\Contracts\LogoutResponse;
 
-class CustomLogoutResponse implements LogoutResponse
+class UserLogoutResponse implements LogoutResponse
 {
     public function toResponse($request)
     {

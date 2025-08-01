@@ -73,6 +73,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::post('/login', [AdminAuthController::class, 'store'])->name('login.submit');
     });
 
+    Route::post('/logout', [AdminAuthController::class, 'destroy'])->name('logout');
+
     // auth に変更し、role=adminをミドルウェアでチェック
     Route::middleware(['auth', 'admin'])->group(function () {
         Route::get('/attendance/list', [AdminAttendanceController::class, 'index'])->name('attendance.list');
@@ -82,6 +84,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
         Route::get('/staff/list', [StaffController::class, 'index'])->name('staff.list');
         Route::get('/attendance/staff/{id}', [StaffAttendanceController::class, 'show'])->name('staff.attendance');
+        Route::get('/staff/{id}/attendances/csv', [StaffAttendanceController::class, 'exportCsv'])
+            ->name('staff.attendance.csv');
 
         Route::get('/stamp_correction_request/list', [AttendanceApprovalController::class, 'index'])->name('request.list');
 

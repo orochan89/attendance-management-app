@@ -50,7 +50,7 @@ body {
     text-decoration: none;
 }
 
-.attendance-list__month-wrapper {
+.attendance-list__date-wrapper {
     position: relative;
     display: inline-block;
 }
@@ -64,7 +64,7 @@ body {
     color: #555;
 }
 
-.attendance-list__month-picker {
+.attendance-list__date-text {
     margin: auto;
     font-size: 18px;
     font-weight: bold;

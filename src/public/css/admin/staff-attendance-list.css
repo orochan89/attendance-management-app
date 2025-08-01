@@ -64,7 +64,7 @@ body {
     color: #555;
 }
 
-.attendance-list__month-picker {
+.attendance-list__month-text {
     margin: auto;
     font-size: 18px;
     font-weight: bold;
@@ -111,4 +111,26 @@ body {
     font-size: 18px;
 }
 
+.attendance-list__csv-action {
+    width: 70%;
+    margin: 20px auto;
+    text-align: right;
+}
 
+.attendance-list__csv-button {
+    background-color: #000000;
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 10px 32px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    display: inline-block;
+    transition: background-color 0.3s ease;
+    text-decoration: none;
+}
+
+.attendance-list__csv-button:hover {
+    background-color: #333333;
+}

@@ -43,28 +43,23 @@ class AttendanceCorrectionRequest extends FormRequest
     {
         $messages = [
             'requested_clock_in.required'  => '出勤時刻を入力してください。',
-            'requested_clock_in.date_format'  => '出勤時刻は「HH:MM」形式で入力してください。',
-            'requested_clock_out.required' => '退勤時刻を入力してください。',
-            'requested_clock_out.date_format' => '退勤時刻は「HH:MM」形式で入力してください。',
-            'reason.required'              => '備考を記入してください。',
-            'reason.string'                => '備考は文字列で入力してください。',
-            'reason.max'                   => '備考は255文字以内で入力してください。',
+            'requested_clock_in.date_format'  => '出勤時刻は「HH:MM」形式で入力してください',
+            'requested_clock_out.required' => '退勤時刻を入力してください',
+            'requested_clock_out.date_format' => '退勤時刻は「HH:MM」形式で入力してください',
+            'reason.required'              => '備考を記入してください',
+            'reason.string'                => '備考は文字列で入力してください',
+            'reason.max'                   => '備考は255文字以内で入力してください',
         ];
 
-        // 動的休憩用メッセージ
         foreach ($this->getBreakFields() as $field) {
-            $messages[$field . '.date_format'] = '休憩時間は「HH:MM」形式で入力してください。';
+            $messages[$field . '.date_format'] = '休憩時間は「HH:MM」形式で入力してください';
         }
 
         return $messages;
     }
 
-    /**
-     * 動的に休憩フィールドを取得
-     */
     private function getBreakFields(): array
     {
-        // breakX_start / breakX_end 形式のフィールドを抽出
         $fields = [];
         foreach ($this->keys() as $key) {
             if (preg_match('/^break\d+_(start|end)$/', $key)) {
@@ -84,12 +79,10 @@ class AttendanceCorrectionRequest extends FormRequest
                 $inTime  = Carbon::createFromFormat('H:i', $in);
                 $outTime = Carbon::createFromFormat('H:i', $out);
 
-                // 出勤・退勤整合チェック
                 if ($inTime->gte($outTime)) {
                     $validator->errors()->add('requested_clock_in', '出勤時間もしくは退勤時間が不適切な値です');
                 }
 
-                // 休憩時間整合チェック
                 foreach ($this->getBreakFields() as $field) {
                     $val = $this->input($field);
                     if ($val) {
