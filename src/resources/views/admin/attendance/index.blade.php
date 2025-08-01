@@ -7,23 +7,16 @@
 @section('content')
     @include('components.nav')
 
-    @php
-        $currentDate = request('date') ? \Carbon\Carbon::parse(request('date')) : now();
-        $prevDate = $currentDate->copy()->subDay()->format('Y-m-d');
-        $nextDate = $currentDate->copy()->addDay()->format('Y-m-d');
-    @endphp
-
     <div class="admin">
         <h1 class="attendance-list__title">
             {{ $currentDate->format('Y年n月j日') }}の勤怠
         </h1>
+
         <div class="attendance-list__header">
             <form class="attendance-list__navigation" action="" method="GET">
-
                 <a class="attendance-list__nav-button" href="{{ route('admin.attendance.list', ['date' => $prevDate]) }}">
                     前日
                 </a>
-
 
                 <div class="attendance-list__date-wrapper">
                     <i class="fas fa-calendar-alt calendar-icon"></i>
@@ -53,47 +46,22 @@
                 @forelse ($attendances as $attendance)
                     <tr class="attendance-list__row">
                         <td class="attendance-list__cell">
-                            {{ $attendance->user->name ?? '不明なユーザー' }}
+                            {{ $attendance['user_name'] }}
                         </td>
                         <td class="attendance-list__cell">
-                            {{ $attendance->clock_in_time ? \Carbon\Carbon::parse($attendance->clock_in_time)->format('H:i') : '-' }}
+                            {{ $attendance['clock_in'] }}
                         </td>
                         <td class="attendance-list__cell">
-                            {{ $attendance->clock_out_time ? \Carbon\Carbon::parse($attendance->clock_out_time)->format('H:i') : '-' }}
+                            {{ $attendance['clock_out'] }}
                         </td>
                         <td class="attendance-list__cell">
-                            @php
-                                $totalBreakMinutes = $attendance->breaks->reduce(function ($carry, $break) {
-                                    if ($break->break_start && $break->break_end) {
-                                        $start = \Carbon\Carbon::parse($break->break_start);
-                                        $end = \Carbon\Carbon::parse($break->break_end);
-                                        return $carry + $start->diffInMinutes($end);
-                                    }
-                                    return $carry;
-                                }, 0);
-                                $breakFormatted = sprintf(
-                                    '%d:%02d',
-                                    floor($totalBreakMinutes / 60),
-                                    $totalBreakMinutes % 60,
-                                );
-                            @endphp
-                            {{ $totalBreakMinutes > 0 ? $breakFormatted : '-' }}
+                            {{ $attendance['break_time'] }}
                         </td>
                         <td class="attendance-list__cell">
-                            @php
-                                if ($attendance->clock_in_time && $attendance->clock_out_time) {
-                                    $start = \Carbon\Carbon::parse($attendance->clock_in_time);
-                                    $end = \Carbon\Carbon::parse($attendance->clock_out_time);
-                                    $workMinutes = $start->diffInMinutes($end) - $totalBreakMinutes;
-                                    $workFormatted = sprintf('%d:%02d', floor($workMinutes / 60), $workMinutes % 60);
-                                } else {
-                                    $workFormatted = '-';
-                                }
-                            @endphp
-                            {{ $workFormatted }}
+                            {{ $attendance['work_time'] }}
                         </td>
                         <td class="attendance-list__cell">
-                            <a href="{{ route('admin.attendance.show', $attendance->id) }}">詳細</a>
+                            <a href="{{ route('admin.attendance.show', $attendance['id']) }}">詳細</a>
                         </td>
                     </tr>
                 @empty

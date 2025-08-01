@@ -7,45 +7,105 @@ use App\Http\Requests\Admin\AdminUpdateAttendanceRequest;
 use Illuminate\Http\Request;
 use App\Models\Attendance;
 use Carbon\Carbon;
+use Illuminate\Support\Str;
 
 class AttendanceController extends Controller
 {
     public function index(Request $request)
     {
-
         $currentDate = $request->input('date')
             ? Carbon::parse($request->input('date'))
-            : Carbon::today();
+            : now();
 
         $attendances = Attendance::with(['user', 'breaks'])
-            ->where('date', $currentDate->toDateString())
+            ->where('date', $currentDate->format('Y-m-d'))
+            ->whereNotNull('clock_in_time')
             ->get();
 
+        $processedAttendances = $attendances->map(function ($attendance) {
+            $hasClockInOut = $attendance->clock_in_time && $attendance->clock_out_time;
+
+            if ($hasClockInOut) {
+                $clockIn = Carbon::parse($attendance->clock_in_time)->format('H:i');
+                $clockOut = Carbon::parse($attendance->clock_out_time)->format('H:i');
+
+                $totalBreakMinutes = $attendance->breaks->reduce(function ($carry, $break) {
+                    if ($break->break_start && $break->break_end) {
+                        $start = Carbon::parse($break->break_start);
+                        $end = Carbon::parse($break->break_end);
+                        return $carry + $start->diffInMinutes($end);
+                    }
+                    return $carry;
+                }, 0);
+
+                $breakFormatted = sprintf('%d:%02d', floor($totalBreakMinutes / 60), $totalBreakMinutes % 60);
+
+                $start = Carbon::parse($attendance->clock_in_time);
+                $end = Carbon::parse($attendance->clock_out_time);
+                $workMinutes = $start->diffInMinutes($end) - $totalBreakMinutes;
+                $workFormatted = sprintf('%d:%02d', floor($workMinutes / 60), $workMinutes % 60);
+            } else {
+                $clockIn = '';
+                $clockOut = '';
+                $breakFormatted = '';
+                $workFormatted = '';
+            }
+
+            return [
+                'id' => $attendance->id,
+                'user_name' => $attendance->user->name ?? '不明なユーザー',
+                'clock_in' => $clockIn,
+                'clock_out' => $clockOut,
+                'break_time' => $breakFormatted,
+                'work_time' => $workFormatted,
+            ];
+        });
+
         return view('admin.attendance.index', [
-            'attendances' => $attendances,
+            'attendances' => $processedAttendances,
             'currentDate' => $currentDate,
+            'prevDate' => $currentDate->copy()->subDay()->format('Y-m-d'),
+            'nextDate' => $currentDate->copy()->addDay()->format('Y-m-d'),
         ]);
     }
 
     public function show($id)
     {
-        $attendance = Attendance::with(['user', 'breaks'])->findOrFail($id);
+        if (str_starts_with($id, 'date-')) {
+            preg_match('/date-(\d{8})-user-(\d+)/', $id, $matches);
+            if (!$matches) {
+                abort(404);
+            }
+
+            $date = Carbon::createFromFormat('Ymd', $matches[1])->toDateString();
+            $userId = (int)$matches[2];
+
+            $attendance = Attendance::firstOrCreate([
+                'user_id' => $userId,
+                'date' => $date,
+            ]);
+        } else {
+            $attendance = Attendance::findOrFail($id);
+        }
+
+        $attendance->load('user', 'breaks');
 
         $breaks = $attendance->breaks;
 
-        return view('admin.attendance.show', compact('attendance', 'breaks'));
+        return view('admin.attendance.show', [
+            'attendance' => $attendance,
+            'breaks' => $breaks,
+        ]);
     }
 
     public function update(AdminUpdateAttendanceRequest $request, $id)
     {
         $attendance = Attendance::with('breaks')->findOrFail($id);
 
-        // 出勤・退勤の更新
         $attendance->clock_in_time = $request->input('clock_in_time') ?: null;
         $attendance->clock_out_time = $request->input('clock_out_time') ?: null;
         $attendance->save();
 
-        // 既存の休憩を更新
         $breaksInput = $request->input('breaks', []);
         foreach ($attendance->breaks as $index => $break) {
             if (isset($breaksInput[$index])) {
@@ -55,7 +115,6 @@ class AttendanceController extends Controller
             }
         }
 
-        // 新しい休憩の追加（最後の1行用）
         $newBreakIndex = count($attendance->breaks);
         if (!empty($breaksInput[$newBreakIndex]['start']) || !empty($breaksInput[$newBreakIndex]['end'])) {
             $attendance->breaks()->create([

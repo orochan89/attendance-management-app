@@ -36,14 +36,14 @@
                         @if (is_null($correction) || optional($correction)->status === 'approved')
                             <td class="attendance-detail__cell">
                                 <input class="attendance-detail__time-input" type="time" name="requested_clock_in"
-                                    value="{{ old('requested_clock_in', optional($correction)->requested_clock_in ?? ($attendance->clock_in_time ? \Carbon\Carbon::parse($attendance->clock_in_time)->format('H:i') : '')) }}">
+                                    value="{{ old('clock_in_time', $clockIn) }}">
                                 @error('requested_clock_in')
                                     <p class="attendance-detail__error">{{ $message }}</p>
                                 @enderror
                             </td>
                             <td class="attendance-detail__cell">
                                 <input class="attendance-detail__time-input" type="time" name="requested_clock_out"
-                                    value="{{ old('requested_clock_out', optional($correction)->requested_clock_out ?? ($attendance->clock_out_time ? \Carbon\Carbon::parse($attendance->clock_out_time)->format('H:i') : '')) }}">
+                                    value="{{ old('clock_out_time', $clockOut) }}">
                                 @error('requested_clock_out')
                                     <p class="attendance-detail__error">{{ $message }}</p>
                                 @enderror
@@ -60,39 +60,25 @@
                         @endif
                     </tr>
 
-                    {{-- 休憩欄 --}}
-                    @foreach ($breaks as $index => $break)
-                        @php
-                            $startField = 'break' . ($index + 1) . '_start';
-                            $endField = 'break' . ($index + 1) . '_end';
-                            $correctionBreak = optional(optional($correction)->breakCorrections)[$index] ?? null;
-                            $correctionStart = optional($correctionBreak)->requested_break_start;
-                            $correctionEnd = optional($correctionBreak)->requested_break_end;
-                        @endphp
+                    @foreach ($formattedBreaks as $index => $break)
                         <tr class="attendance-detail__row">
-                            <th class="attendance-detail__cell attendance-detail__cell--label">休憩{{ $index + 1 }}</th>
-                            @if (is_null($correction) || optional($correction)->status === 'approved')
+                            <th class="attendance-detail__cell attendance-detail__cell--label">{{ $break['label'] }}</th>
+
+                            @if (is_null($correction) || $correction->status === 'approved')
                                 <td class="attendance-detail__cell">
-                                    <input class="attendance-detail__time-input" type="time" name="{{ $startField }}"
-                                        value="{{ old($startField, $correctionStart ?? ($break->break_start ? \Carbon\Carbon::parse($break->break_start)->format('H:i') : '')) }}">
-                                    @error($startField)
-                                        <p class="attendance-detail__error">{{ $message }}</p>
-                                    @enderror
+                                    <input type="time" name="break{{ $index + 1 }}_start"
+                                        value="{{ old("break{$index}_start", $break['start_value']) }}">
                                 </td>
                                 <td class="attendance-detail__cell">
-                                    <input class="attendance-detail__time-input" type="time" name="{{ $endField }}"
-                                        value="{{ old($endField, $correctionEnd ?? ($break->break_end ? \Carbon\Carbon::parse($break->break_end)->format('H:i') : '')) }}">
-                                    @error($endField)
-                                        <p class="attendance-detail__error">{{ $message }}</p>
-                                    @enderror
+                                    <input type="time" name="break{{ $index + 1 }}_end"
+                                        value="{{ old("break{$index}_end", $break['end_value']) }}">
                                 </td>
                             @else
                                 <td class="attendance-detail__cell">
-                                    <p>{{ $correctionStart ? \Carbon\Carbon::parse($correctionStart)->format('H:i') : '' }}
-                                    </p>
+                                    <p>{{ $break['start_value'] }}</p>
                                 </td>
                                 <td class="attendance-detail__cell">
-                                    <p>{{ $correctionEnd ? \Carbon\Carbon::parse($correctionEnd)->format('H:i') : '' }}</p>
+                                    <p>{{ $break['end_value'] }}</p>
                                 </td>
                             @endif
                         </tr>
@@ -101,22 +87,21 @@
                     {{-- 追加用の空の休憩フィールド（pending時は非表示） --}}
                     @if (is_null($correction) || optional($correction)->status === 'approved')
                         <tr class="attendance-detail__row">
-                            <th class="attendance-detail__cell attendance-detail__cell--label">休憩{{ count($breaks) + 1 }}
+                            <th class="attendance-detail__cell attendance-detail__cell--label">
+                                休憩{{ $breaks->count() + 1 }}
                             </th>
                             <td class="attendance-detail__cell">
-                                <input class="attendance-detail__time-input" type="time"
-                                    name="break{{ count($breaks) + 1 }}_start"
-                                    value="{{ old('break' . (count($breaks) + 1) . '_start') }}">
-                                @error('break' . (count($breaks) + 1) . '_start')
-                                    <p class="attendance-detail__error">{{ $message }}</p>
+                                <input type="time" name="break{{ $breaks->count() + 1 }}_start"
+                                    value="{{ old('break' . ($breaks->count() + 1) . '_start') }}">
+                                @error('break' . ($breaks->count() + 1) . '_start')
+                                    <div class="attendance-detail__error">{{ $message }}</div>
                                 @enderror
                             </td>
                             <td class="attendance-detail__cell">
-                                <input class="attendance-detail__time-input" type="time"
-                                    name="break{{ count($breaks) + 1 }}_end"
-                                    value="{{ old('break' . (count($breaks) + 1) . '_end') }}">
-                                @error('break' . (count($breaks) + 1) . '_end')
-                                    <p class="attendance-detail__error">{{ $message }}</p>
+                                <input type="time" name="break{{ $breaks->count() + 1 }}_end"
+                                    value="{{ old('break' . ($breaks->count() + 1) . '_end') }}">
+                                @error('break' . ($breaks->count() + 1) . '_end')
+                                    <div class="attendance-detail__error">{{ $message }}</div>
                                 @enderror
                             </td>
                         </tr>

@@ -41,32 +41,25 @@
                 </tr>
             </thead>
             <tbody class="attendance-list__tbody">
-                @foreach ($dates as $date)
-                    @php
-                        $attendance = $attendances->get($date->format('Y-m-d'));
-                    @endphp
+                @foreach ($dates as $day)
                     <tr class="attendance-list__row">
-                        @php
-                            $weekdays = ['日', '月', '火', '水', '木', '金', '土'];
-                        @endphp
                         <td class="attendance-list__cell">
-                            {{ $date->format('m/d') }}({{ $weekdays[$date->dayOfWeek] }})
+                            {{ $day['formatted'] }}
                         </td>
                         <td class="attendance-list__cell">
-                            {{ isset($attendance) && $attendance->clock_in_time ? \Carbon\Carbon::parse($attendance->clock_in_time)->format('H:i') : '' }}
+                            {{ $day['attendance']->clock_in_time ? \Carbon\Carbon::parse($day['attendance']->clock_in_time)->format('H:i') : '' }}
                         </td>
                         <td class="attendance-list__cell">
-                            {{ isset($attendance) && $attendance->clock_out_time ? \Carbon\Carbon::parse($attendance->clock_out_time)->format('H:i') : '' }}
+                            {{ $day['attendance']->clock_out_time ? \Carbon\Carbon::parse($day['attendance']->clock_out_time)->format('H:i') : '' }}
                         </td>
                         <td class="attendance-list__cell">
-                            {{ $attendance->total_break_formatted }}
-                        </td>
-                        </td>
-                        <td class="attendance-list__cell">
-                            {{ $attendance->work_time_formatted }}
+                            {{ $day['attendance']->clock_in_time ? $day['attendance']->total_break_formatted : '' }}
                         </td>
                         <td class="attendance-list__cell">
-                            <a href="{{ route('staff.attendance.show', $attendance->id) }}">詳細</a>
+                            {{ $day['attendance']->clock_in_time ? $day['attendance']->work_time_formatted : '' }}
+                        </td>
+                        <td class="attendance-list__cell">
+                            <a href="{{ route('staff.attendance.show', $day['attendance']->id) }}">詳細</a>
                         </td>
                     </tr>
                 @endforeach

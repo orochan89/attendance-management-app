@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use Carbon\Carbon;
 use App\Models\User;
 use Symfony\Component\HttpFoundation\StreamedResponse;
+use App\Models\Attendance;
+
 
 class StaffAttendanceController extends Controller
 {
@@ -18,23 +20,43 @@ class StaffAttendanceController extends Controller
         return view('admin.staff.index', compact('users'));
     }
 
-    // ユーザーごとの勤怠一覧を表示
     public function show($id, Request $request)
     {
-        $user = User::with(['attendances.breaks'])->findOrFail($id);
+        $user = User::findOrFail($id);
 
-        // 月指定 (例: ?month=2025-07)
         $currentMonth = $request->input('month')
             ? Carbon::parse($request->input('month') . '-01')
             : Carbon::now()->startOfMonth();
 
-        $attendances = $user->attendances()
-            ->whereMonth('date', $currentMonth->month)
-            ->whereYear('date', $currentMonth->year)
-            ->with('breaks')
-            ->get();
+        $startOfMonth = $currentMonth->copy()->startOfMonth();
+        $endOfMonth = $currentMonth->copy()->endOfMonth();
 
-        return view('admin.staff.attendances', compact('user', 'attendances', 'currentMonth'));
+        $prevMonth = $currentMonth->copy()->subMonth()->format('Y-m');
+        $nextMonth = $currentMonth->copy()->addMonth()->format('Y-m');
+
+        $weekdays = ['日', '月', '火', '水', '木', '金', '土'];
+        $dates = collect();
+
+        foreach ($startOfMonth->daysUntil($endOfMonth->copy()->addDay()) as $date) {
+            $attendance = Attendance::firstOrCreate([
+                'user_id' => $user->id,
+                'date' => $date->toDateString(),
+            ]);
+
+            $dates->push([
+                'date' => $date,
+                'formatted' => $date->format('m/d') . '(' . $weekdays[$date->dayOfWeek] . ')',
+                'attendance' => $attendance,
+            ]);
+        }
+
+        return view('admin.staff.attendances', [
+            'user' => $user,
+            'dates' => $dates,
+            'currentMonth' => $currentMonth,
+            'prevMonth' => $prevMonth,
+            'nextMonth' => $nextMonth,
+        ]);
     }
 
     public function exportCsv($id, Request $request): StreamedResponse

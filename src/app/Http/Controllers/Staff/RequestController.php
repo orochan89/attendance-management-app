@@ -33,6 +33,14 @@ class RequestController extends Controller
     {
         $attendance = Attendance::findOrFail($id);
 
+        // すでにpending申請がある場合はリダイレクト（※任意で追加）
+        $pending = AttendanceCorrection::where('attendance_id', $attendance->id)
+            ->where('status', 'pending')
+            ->exists();
+        if ($pending) {
+            return redirect()->back()->with('error', 'すでに承認待ちの申請があります。');
+        }
+
         // 1. 勤怠修正データを作成
         $correction = AttendanceCorrection::create([
             'user_id'            => Auth::id(),
@@ -43,18 +51,18 @@ class RequestController extends Controller
             'status'             => 'pending'
         ]);
 
-        // 2. 休憩修正データをループで保存
+        // 2. 休憩修正データをループで保存（★ここをリレーションで保存）
         foreach ($this->getBreakPairs($request) as $break) {
             if ($break['start'] || $break['end']) {
-                BreakCorrection::create([
-                    'attendance_correction_id' => $correction->id,
-                    'requested_break_start'    => $break['start'],
-                    'requested_break_end'      => $break['end'],
+                $correction->breakCorrections()->create([
+                    'requested_break_start' => $break['start'],
+                    'requested_break_end'   => $break['end'],
                 ]);
             }
         }
 
-        return redirect()->route('staff.attendance.show', ['id' => $id]);
+        return redirect()->route('staff.attendance.show', ['id' => $id])
+            ->with('success', '修正申請を送信しました。');
     }
 
     /**

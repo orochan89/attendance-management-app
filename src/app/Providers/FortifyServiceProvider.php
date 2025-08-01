@@ -39,10 +39,10 @@ class FortifyServiceProvider extends ServiceProvider
 
         $this->app->bind(LogoutResponse::class, function () {
             if (request()->is('admin/*')) {
-                return new \App\Http\Responses\AdminLogoutResponse();
+                return new AdminLogoutResponse();
             }
 
-            return new \App\Http\Responses\UserLogoutResponse();
+            return new UserLogoutResponse();
         });
     }
 

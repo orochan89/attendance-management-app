@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Carbon;
 use App\Http\Controllers\Controller;
 use App\Models\Attendance;
+use App\Models\AttendanceCorrection;
 use Carbon\CarbonPeriod;
 
 
@@ -95,20 +96,24 @@ class AttendanceController extends Controller
         $prevMonth = $currentMonth->copy()->subMonth()->format('Y-m');
         $nextMonth = $currentMonth->copy()->addMonth()->format('Y-m');
 
-        $dates = CarbonPeriod::create($startOfMonth, $endOfMonth);
+        $weekdays = ['日', '月', '火', '水', '木', '金', '土'];
 
-        $attendanceList = collect();
+        $dates = collect();
 
-        foreach ($dates as $date) {
+        foreach (Carbon::parse($startOfMonth)->daysUntil($endOfMonth->copy()->addDay()) as $date) {
             $attendance = Attendance::firstOrCreate([
                 'user_id' => Auth::id(),
                 'date' => $date->toDateString(),
             ]);
-            $attendanceList->put($date->format('Y-m-d'), $attendance);
+
+            $dates->push([
+                'date' => $date,
+                'formatted' => $date->format('m/d') . '(' . $weekdays[$date->dayOfWeek] . ')',
+                'attendance' => $attendance,
+            ]);
         }
 
         return view('user.attendance.index', [
-            'attendances' => $attendanceList,
             'dates' => $dates,
             'currentMonth' => $currentMonth,
             'prevMonth' => $prevMonth,
@@ -118,20 +123,59 @@ class AttendanceController extends Controller
 
     public function show($id)
     {
-        $attendance = Attendance::with('breaks')->findOrFail($id);
+        $attendance = Attendance::with(['user', 'breaks'])->findOrFail($id);
 
-        if ($attendance->user_id !== Auth::id()) {
-            abort(403, 'この勤怠情報にアクセスする権限がありません。');
-        }
-
-        // 最新の修正申請とその休憩修正を取得
-        $correction = $attendance->attendanceCorrections()
-            ->with('breakCorrections')
+        $correction = AttendanceCorrection::with('breakCorrections')
+            ->where('attendance_id', $attendance->id)
             ->latest()
             ->first();
 
-        $breaks = $attendance->breaks;
+        $clockIn = $attendance->clock_in_time
+            ? \Carbon\Carbon::parse($attendance->clock_in_time)->format('H:i')
+            : '';
 
-        return view('user.attendance.show', compact('attendance', 'correction', 'breaks'));
+        $clockOut = $attendance->clock_out_time
+            ? \Carbon\Carbon::parse($attendance->clock_out_time)->format('H:i')
+            : '';
+
+        if ($correction && $correction->status === 'pending') {
+            $breaks = $correction->breakCorrections;
+
+            $formattedBreaks = $breaks->map(function ($break, $index) {
+                return [
+                    'label' => '休憩' . ($index + 1),
+                    'start_value' => optional($break->requested_break_start)->format('H:i'),
+                    'end_value'   => optional($break->requested_break_end)->format('H:i'),
+                ];
+            });
+        } else {
+            $breaks = $attendance->breaks;
+
+            $formattedBreaks = $breaks->map(function ($break, $index) {
+                return [
+                    'label' => '休憩' . ($index + 1),
+                    'start_name' => "break{$index}_start",
+                    'end_name' => "break{$index}_end",
+                    'start_value' => optional($break->break_start)->format('H:i'),
+                    'end_value'   => optional($break->break_end)->format('H:i'),
+                ];
+            });
+        }
+
+        $newBreakField = [
+            'label' => '休憩' . ($breaks->count() + 1),
+            'start_name' => "break" . $breaks->count() . "_start",
+            'end_name' => "break" . $breaks->count() . "_end",
+        ];
+
+        return view('user.attendance.show', compact(
+            'attendance',
+            'clockIn',
+            'clockOut',
+            'formattedBreaks',
+            'newBreakField',
+            'correction',
+            'breaks'
+        ));
     }
 }
