@@ -19,7 +19,7 @@
                 <div class="attendance-list__month-wrapper">
                     <i class="fas fa-calendar-alt calendar-icon"></i>
                     <p class="attendance-list__month-text">
-                        {{ $currentMonth->format('Y年n月') }}
+                        {{ $currentMonth->format('Y/m') }}
                     </p>
                 </div>
 

@@ -14,13 +14,13 @@ class BreakTimeFactory extends Factory
 
     public function definition(): array
     {
-        $start = Carbon::now()->setTime(12, 0);
-        $end = (clone $start)->addMinutes(45);
+        $breakStart = Carbon::now()->setTime(12, 0);
+        $breakEnd = Carbon::now()->setTime(13, 0);
 
         return [
             'attendance_id' => Attendance::factory(),
-            'break_start' => $start,
-            'break_end' => $end,
+            'break_start' => $breakStart,
+            'break_end' => $breakEnd,
         ];
     }
 }

@@ -16,7 +16,7 @@ class AttendanceFactory extends Factory
     {
         $date = $this->faker->dateTimeBetween('-1 month', 'now');
         $clockIn = Carbon::instance($date)->setTime(9, 0);
-        $clockOut = (clone $clockIn)->addHours(8);
+        $clockOut = Carbon::instance($date)->setTime(18, 0);
 
         return [
             'user_id' => User::factory(),

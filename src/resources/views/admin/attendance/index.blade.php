@@ -21,7 +21,7 @@
                 <div class="attendance-list__date-wrapper">
                     <i class="fas fa-calendar-alt calendar-icon"></i>
                     <p class="attendance-list__date-text">
-                        {{ $currentDate->format('Y年n月j日') }}
+                        {{ $currentDate->format('Y/m/d') }}
                     </p>
                 </div>
 

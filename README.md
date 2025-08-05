@@ -71,11 +71,22 @@ PUSHER_APP_CLUSTER=mt1
 MIX_PUSHER_APP_KEY="${PUSHER_APP_KEY}"  
 MIX_PUSHER_APP_CLUSTER="${PUSHER_APP_CLUSTER}"
 
+## テスト用ユーザー情報
+
+スタッフ画面ログイン用  
+Email : test@example.com  
+Password : password
+
+管理者画面ログイン用  
+Email : admin@example.com  
+Password : password
+
 ## 使用技術
 
-・ php 7.4.9  
+・ php 8.1  
 ・ Laravel 8.\*  
 ・ MySQL 8.0.26  
+・ JavaScript  
 ・ MailHog
 
 ## ER 図

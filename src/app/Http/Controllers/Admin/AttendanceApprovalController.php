@@ -10,7 +10,6 @@ class AttendanceApprovalController extends Controller
 {
     public function index(Request $request)
     {
-        // ステータスをフィルタリング（デフォルトは pending）
         $status = $request->query('status', 'pending');
 
         $corrections = AttendanceCorrection::with(['user', 'attendance'])
@@ -38,12 +37,10 @@ class AttendanceApprovalController extends Controller
 
         $attendance = $correction->attendance;
 
-        // 勤怠の修正
         $attendance->clock_in_time  = $correction->requested_clock_in;
         $attendance->clock_out_time = $correction->requested_clock_out;
         $attendance->save();
 
-        // 休憩時間を更新
         $attendance->breaks()->delete();
         foreach ($correction->breakCorrections as $breakCorrection) {
             $attendance->breaks()->create([
@@ -52,8 +49,9 @@ class AttendanceApprovalController extends Controller
             ]);
         }
 
-        // ステータス更新
         $correction->status = 'approved';
+        $correction->reviewed_by = auth()->id();
+        $correction->reviewed_at = now();
         $correction->save();
 
         return redirect()

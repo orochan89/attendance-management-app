@@ -100,7 +100,7 @@ class AttendanceController extends Controller
 
         $dates = collect();
 
-        foreach (Carbon::parse($startOfMonth)->daysUntil($endOfMonth->copy()->addDay()) as $date) {
+        foreach (Carbon::parse($startOfMonth)->daysUntil($endOfMonth) as $date) {
             $attendance = Attendance::firstOrCreate([
                 'user_id' => Auth::id(),
                 'date' => $date->toDateString(),

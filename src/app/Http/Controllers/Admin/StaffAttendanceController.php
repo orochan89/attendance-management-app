@@ -14,7 +14,6 @@ class StaffAttendanceController extends Controller
 {
     public function index()
     {
-        // role = 'staff' のユーザーを一覧取得
         $users = User::where('role', 'staff')->get();
 
         return view('admin.staff.index', compact('users'));
@@ -37,7 +36,7 @@ class StaffAttendanceController extends Controller
         $weekdays = ['日', '月', '火', '水', '木', '金', '土'];
         $dates = collect();
 
-        foreach ($startOfMonth->daysUntil($endOfMonth->copy()->addDay()) as $date) {
+        foreach ($startOfMonth->daysUntil($endOfMonth) as $date) {
             $attendance = Attendance::firstOrCreate([
                 'user_id' => $user->id,
                 'date' => $date->toDateString(),
