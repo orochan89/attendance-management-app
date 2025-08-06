@@ -108,7 +108,7 @@ MIX_PUSHER_APP_CLUSTER="${PUSHER_APP_CLUSTER}"
 
 APP_NAME=Laravel  
 APP_ENV=test  
-APP_KEY=base64:jcb68tfdIk9MKgIenuvCoYE49ZZ3Sd7g0QZ7fkBDC4Q=  
+APP_KEY=base64:5P+4eNM1o4FPQGsh3ztGl6VsCa2gROGLuc1XGAWZTm8=  
 APP_DEBUG=true  
 APP_URL=http://localhost
 
@@ -119,7 +119,7 @@ LOG_LEVEL=debug
 DB_CONNECTION=mysql  
 DB_HOST=mysql  
 DB_PORT=3306  
-DB_DATABASE=test  
+DB_DATABASE=demo_test  
 DB_USERNAME=root  
 DB_PASSWORD=root
 
