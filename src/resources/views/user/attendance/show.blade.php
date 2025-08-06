@@ -66,11 +66,13 @@
 
                             @if (is_null($correction) || $correction->status === 'approved')
                                 <td class="attendance-detail__cell">
-                                    <input type="time" name="break{{ $index + 1 }}_start"
+                                    <input class="attendance-detail__time-input" type="time"
+                                        name="break{{ $index + 1 }}_start"
                                         value="{{ old("break{$index}_start", $break['start_value']) }}">
                                 </td>
                                 <td class="attendance-detail__cell">
-                                    <input type="time" name="break{{ $index + 1 }}_end"
+                                    <input class="attendance-detail__time-input" type="time"
+                                        name="break{{ $index + 1 }}_end"
                                         value="{{ old("break{$index}_end", $break['end_value']) }}">
                                 </td>
                             @else
@@ -91,14 +93,16 @@
                                 休憩{{ $breaks->count() + 1 }}
                             </th>
                             <td class="attendance-detail__cell">
-                                <input type="time" name="break{{ $breaks->count() + 1 }}_start"
+                                <input class="attendance-detail__time-input" type="time"
+                                    name="break{{ $breaks->count() + 1 }}_start"
                                     value="{{ old('break' . ($breaks->count() + 1) . '_start') }}">
                                 @error('break' . ($breaks->count() + 1) . '_start')
                                     <div class="attendance-detail__error">{{ $message }}</div>
                                 @enderror
                             </td>
                             <td class="attendance-detail__cell">
-                                <input type="time" name="break{{ $breaks->count() + 1 }}_end"
+                                <input class="attendance-detail__time-input" type="time"
+                                    name="break{{ $breaks->count() + 1 }}_end"
                                     value="{{ old('break' . ($breaks->count() + 1) . '_end') }}">
                                 @error('break' . ($breaks->count() + 1) . '_end')
                                     <div class="attendance-detail__error">{{ $message }}</div>

@@ -48,7 +48,7 @@
                             {{ $correction->reason ?? '-' }}
                         </td>
                         <td class="request-list__cell">
-                            {{ $correction->created_at->format('Y/m/d H:i') }}
+                            {{ $correction->created_at->format('Y/m/d') }}
                         </td>
                         <td class="request-list__cell">
                             <a class="request-list__link"
