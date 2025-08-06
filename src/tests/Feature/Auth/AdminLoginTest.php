@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\Auth;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -19,7 +19,7 @@ class AdminLoginTest extends TestCase
     {
         User::factory()->create([
             'email' => 'admin@example.com',
-            'password' => Hash::make('adminpassword'),
+            'password' => Hash::make('password'),
             'role' => 'admin',
         ]);
 
@@ -27,7 +27,7 @@ class AdminLoginTest extends TestCase
             ->from($this->adminLoginUrl)
             ->post($this->adminLoginUrl, [
                 'email' => '',
-                'password' => 'adminpassword',
+                'password' => 'password',
             ]);
 
         $response->assertSessionHasErrors(['email']);
@@ -41,7 +41,7 @@ class AdminLoginTest extends TestCase
     {
         $admin = User::factory()->create([
             'email' => 'admin@example.com',
-            'password' => Hash::make('adminpassword'),
+            'password' => Hash::make('password'),
             'role' => 'admin',
         ]);
 
@@ -63,7 +63,7 @@ class AdminLoginTest extends TestCase
     {
         User::factory()->create([
             'email' => 'admin@example.com',
-            'password' => Hash::make('adminpassword'),
+            'password' => Hash::make('password'),
             'role' => 'admin',
         ]);
 
