@@ -24,55 +24,76 @@ class AdminUpdateAttendanceRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            'clock_in_time' => ['required', 'date_format:H:i'],
+        // 基本ルール
+        $rules = [
+            'clock_in_time'  => ['required', 'date_format:H:i'],
             'clock_out_time' => ['required', 'date_format:H:i'],
-            'reason' => ['required', 'string', 'max:255'],
-            'breaks.*.start' => ['nullable', 'date_format:H:i'],
-            'breaks.*.end' => ['nullable', 'date_format:H:i'],
+            'reason'              => ['required', 'string', 'max:255'],
         ];
+
+        // 休憩フィールドの動的追加
+        foreach ($this->getBreakFields() as $field) {
+            $rules[$field] = ['nullable', 'date_format:H:i'];
+        }
+
+        return $rules;
     }
 
     public function messages(): array
     {
-        return [
-            'clock_in_time.required' => '出勤時刻を入力してください',
+        $messages = [
+            'clock_in_time.required'  => '出勤時刻を入力してください。',
+            'clock_in_time.date_format'  => '出勤時刻は「HH:MM」形式で入力してください',
             'clock_out_time.required' => '退勤時刻を入力してください',
-            'clock_in_time.date_format' => '出勤時刻は「HH:MM」形式で入力してください',
             'clock_out_time.date_format' => '退勤時刻は「HH:MM」形式で入力してください',
-            'reason.required' => '備考を記入してください',
-            'reason.string' => '備考は文字列で入力してください',
-            'reason.max' => '備考は255文字以内で入力してください',
-            'breaks.*.start.date_format' => '休憩開始時刻は「HH:MM」形式で入力してください',
-            'breaks.*.end.date_format' => '休憩終了時刻は「HH:MM」形式で入力してください',
+            'reason.required'              => '備考を記入してください',
+            'reason.string'                => '備考は文字列で入力してください',
+            'reason.max'                   => '備考は255文字以内で入力してください',
         ];
+
+        foreach ($this->getBreakFields() as $field) {
+            $messages[$field . '.date_format'] = '休憩時間は「HH:MM」形式で入力してください';
+        }
+
+        return $messages;
+    }
+
+    private function getBreakFields(): array
+    {
+        $fields = [];
+        foreach ($this->keys() as $key) {
+            if (preg_match('/^break\d+_(start|end)$/', $key)) {
+                $fields[] = $key;
+            }
+        }
+        return $fields;
     }
 
     public function withValidator($validator): void
     {
         $validator->after(function ($validator) {
-            $in = $this->input('clock_in_time');
+            $in  = $this->input('clock_in_time');
             $out = $this->input('clock_out_time');
 
             if ($in && $out) {
-                $inTime = Carbon::createFromFormat('H:i', $in);
+                $inTime  = Carbon::createFromFormat('H:i', $in);
                 $outTime = Carbon::createFromFormat('H:i', $out);
 
                 if ($inTime->gte($outTime)) {
-                    $validator->errors()->add('clock_in_time', '出勤時間もしくは退勤時間が不適切な値です。');
+                    $validator->errors()->add('clock_in_time', '出勤時間もしくは退勤時間が不適切な値です');
                 }
 
                 foreach ($this->input('breaks', []) as $index => $break) {
                     if (!empty($break['start'])) {
                         $start = Carbon::createFromFormat('H:i', $break['start']);
                         if ($start->lt($inTime) || $start->gt($outTime)) {
-                            $validator->errors()->add("breaks.$index.start", '休憩時間が勤務時間外です。');
+                            $validator->errors()->add("breaks.$index.start", '出勤時間もしくは退勤時間が不適切な値です');
                         }
                     }
                     if (!empty($break['end'])) {
                         $end = Carbon::createFromFormat('H:i', $break['end']);
                         if ($end->lt($inTime) || $end->gt($outTime)) {
-                            $validator->errors()->add("breaks.$index.end", '休憩時間が勤務時間外です。');
+                            $validator->errors()->add("breaks.$index.end", '出勤時間もしくは退勤時間が不適切な値です');
                         }
                     }
                 }

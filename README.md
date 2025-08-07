@@ -169,6 +169,11 @@ Password : password
 Email : admin@example.com  
 Password : password
 
+## メール認証
+
+MailHog を使用  
+http://localhost:8025/
+
 ## 使用技術
 
 ・ php 8.1  
