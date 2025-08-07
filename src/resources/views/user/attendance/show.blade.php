@@ -69,11 +69,17 @@
                                     <input class="attendance-detail__time-input" type="time"
                                         name="break{{ $index + 1 }}_start"
                                         value="{{ old("break{$index}_start", $break['start_value']) }}">
+                                    @error('break' . ($index + 1) . '_start')
+                                        <div class="attendance-detail__error">{{ $message }}</div>
+                                    @enderror
                                 </td>
                                 <td class="attendance-detail__cell">
                                     <input class="attendance-detail__time-input" type="time"
                                         name="break{{ $index + 1 }}_end"
                                         value="{{ old("break{$index}_end", $break['end_value']) }}">
+                                    @error('break' . ($index + 1) . '_start')
+                                        <div class="attendance-detail__error">{{ $message }}</div>
+                                    @enderror
                                 </td>
                             @else
                                 <td class="attendance-detail__cell">

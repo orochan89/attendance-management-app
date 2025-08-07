@@ -88,7 +88,7 @@ class AttendanceCorrectionRequest extends FormRequest
                     if ($val) {
                         $breakTime = Carbon::createFromFormat('H:i', $val);
                         if ($breakTime->lt($inTime) || $breakTime->gt($outTime)) {
-                            $validator->errors()->add($field, '休憩時間が勤務時間外です');
+                            $validator->errors()->add($field, '出勤時間もしくは退勤時間が不適切な値です');
                         }
                     }
                 }
