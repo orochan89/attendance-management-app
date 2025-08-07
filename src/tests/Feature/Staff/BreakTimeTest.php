@@ -27,6 +27,9 @@ class BreakTimeTest extends TestCase
             'status' => 'working',
         ]);
 
+        $response = $this->actingAs($user)->get('/attendance');
+        $response->assertSee('休憩入');
+
         $this->actingAs($user)->post('/attendance', ['action' => 'start_break']);
 
         $this->assertDatabaseHas('attendances', [
@@ -75,7 +78,7 @@ class BreakTimeTest extends TestCase
     }
 
     // testcase ID:7 休憩戻ボタンが正しく機能する
-    public function test_break_end_button_works()
+    public function test_resume_work_button_works()
     {
         $user = User::factory()->create()->first();
         Attendance::factory()->create([

@@ -47,7 +47,6 @@ class WorkStartTest extends TestCase
     public function test_work_start_button_is_not_displayed_after_done()
     {
         $user = User::factory()->create()->first();
-
         Attendance::factory()->create([
             'user_id' => $user->id,
             'date' => now()->toDateString(),
@@ -64,7 +63,7 @@ class WorkStartTest extends TestCase
     public function test_clock_in_time_is_visible_on_staff_attendance_list()
     {
         $user = User::factory()->create()->first();
-        $attendance = Attendance::factory()->create([
+        Attendance::factory()->create([
             'user_id' => $user->id,
             'date' => now()->toDateString(),
             'clock_in_time' => null,
