@@ -94,7 +94,7 @@ class UserAttendanceCorrectionTest extends TestCase
             'requested_clock_out' => '18:00',
             'break1_start' => '12:00',
             'break1_end' => '13:00',
-            'reason' => '', // ← 未入力
+            'reason' => '',
         ]);
 
         $response->assertSessionHasErrors([
