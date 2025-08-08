@@ -45,7 +45,9 @@ DB_PORT=3306
 DB_DATABASE=laravel_db
 DB_USERNAME=laravel_user
 DB_PASSWORD=laravel_pass
+```
 
+```env
 MAIL_MAILER=smtp
 MAIL_HOST=mailhog
 MAIL_PORT=1025
@@ -131,7 +133,9 @@ APP_ENV=test
 APP_KEY=
 APP_DEBUG=true
 APP_URL=http://localhost
+```
 
+```env
 DB_CONNECTION=mysql
 DB_HOST=mysql
 DB_PORT=3306
