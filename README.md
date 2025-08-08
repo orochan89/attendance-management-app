@@ -28,7 +28,6 @@ cp .env.example .env
 ```
 
 4. .env 内の環境変数を以下の通り変更
-
 <pre><code class="language-env">
 DB_CONNECTION=mysql
 DB_HOST=mysql
@@ -115,13 +114,14 @@ cp .env .env.testing
 ```
 
 3. .env.testing 内の環境変数を以下の通り変更
-
+<pre><code class="language-env.testing">
 APP_ENV=test  
  APP_KEY=
 
 DB_DATABASE=demo_test  
  DB_USERNAME=root  
  DB_PASSWORD=root
+</code></pre>
 
 ### テスト用データベースの作成
 
