@@ -55,7 +55,7 @@ class AttendanceApprovalController extends Controller
         $correction->save();
 
         return redirect()
-            ->route('admin.request.list')
+            ->back()
             ->with('success', '修正申請を承認しました。');
     }
 }

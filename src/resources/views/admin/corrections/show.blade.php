@@ -92,7 +92,7 @@
                 @if ($correction->status === 'pending')
                     <button class="attendance-detail__button attendance-detail__button--submit" type="submit"
                         name="action" value="approve">
-                        承認する
+                        承認
                     </button>
                 @else
                     <button class="attendance-detail__button attendance-detail__button--submit" type="submit"
