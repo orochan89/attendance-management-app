@@ -50,7 +50,7 @@ MAIL_FROM_NAME="${APP_NAME}"
 
 ```
 
-/code></pre>
+</code></pre>
 
 5. アプリケーションキーを生成
 
