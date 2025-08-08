@@ -102,16 +102,26 @@ http://localhost:8025/
 
 ### テスト用 .env.testing ファイルの作成
 
-1. docker-compose exec php bash
-2. cp .env .env.testing **上記 Laravel 環境構築で作成した .env ファイルをコピーする事**
+1. PHP コンテナに入る
+
+```bash
+docker-compose exec php bash
+```
+
+2. .env をコピーして .env.testing を作成 **開発環境構築で作成した .env ファイルをコピーする事**
+
+```bash
+cp .env .env.testing
+```
+
 3. .env.testing 内の環境変数を以下の通り変更
 
-   APP_ENV=test  
-   APP_KEY=
+APP_ENV=test  
+ APP_KEY=
 
-   DB_DATABASE=demo_test  
-    DB_USERNAME=root  
-    DB_PASSWORD=root
+DB_DATABASE=demo_test  
+ DB_USERNAME=root  
+ DB_PASSWORD=root
 
 ### テスト用データベースの作成
 
