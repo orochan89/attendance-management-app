@@ -65,11 +65,53 @@ body {
 
 .request-list__row.request-list__row--header {
     background-color: #ffffff;
-    font-weight: bold;
     color: #000000;
 }
 
+.request-list__row--header .request-list__cell {
+    font-weight: normal;
+}
+
 .request-list__cell {
+    padding: 5px;
     background-color: #ffffff;
     font-size: 18px;
+}
+
+.request-list__cell--status {
+    width: 14%;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.request-list__cell--name {
+    width: 18%;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.request-list__cell--day {
+    width: 14%;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.request-list__cell--reason {
+    width: 28%;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.request-list__cell--detail {
+    width: 12%;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.request-list__cell--link {
+    text-decoration: none;
+    color: #000000;
+    font-weight: bold;
 }

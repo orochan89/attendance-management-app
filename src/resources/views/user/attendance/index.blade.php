@@ -43,23 +43,24 @@
             <tbody class="attendance-list__tbody">
                 @foreach ($dates as $day)
                     <tr class="attendance-list__row">
-                        <td class="attendance-list__cell">
+                        <td class="attendance-list__cell attendance-list__cell--day">
                             {{ $day['formatted'] }}
                         </td>
-                        <td class="attendance-list__cell">
+                        <td class="attendance-list__cell attendance-list__cell--time">
                             {{ $day['attendance']->clock_in_time ? \Carbon\Carbon::parse($day['attendance']->clock_in_time)->format('H:i') : '' }}
                         </td>
-                        <td class="attendance-list__cell">
+                        <td class="attendance-list__cell attendance-list__cell--time">
                             {{ $day['attendance']->clock_out_time ? \Carbon\Carbon::parse($day['attendance']->clock_out_time)->format('H:i') : '' }}
                         </td>
-                        <td class="attendance-list__cell">
+                        <td class="attendance-list__cell attendance-list__cell--time">
                             {{ $day['attendance']->clock_in_time ? $day['attendance']->total_break_formatted : '' }}
                         </td>
-                        <td class="attendance-list__cell">
+                        <td class="attendance-list__cell attendance-list__cell--time">
                             {{ $day['attendance']->clock_in_time ? $day['attendance']->work_time_formatted : '' }}
                         </td>
-                        <td class="attendance-list__cell">
-                            <a href="{{ route('staff.attendance.show', $day['attendance']->id) }}">詳細</a>
+                        <td class="attendance-list__cell attendance-list__cell--detail">
+                            <a class="attendance-list__cell--link"
+                                href="{{ route('staff.attendance.show', $day['attendance']->id) }}">詳細</a>
                         </td>
                     </tr>
                 @endforeach

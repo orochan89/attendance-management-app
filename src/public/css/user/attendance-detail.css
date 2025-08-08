@@ -32,19 +32,28 @@ body {
     background-color: #ffffff;
 }
 
-.attendance-detail__cell.attendance-detail__cell--label {
-    width: 30%;
-    padding: 20px 0;
-    background-color: #ffffff;
+.attendance-detail__cell {
+    text-align: center;
     font-size: 18px;
     font-weight: bold;
-    color: #000000;
+    padding: 15px;
 }
 
-.attendance-detail__cell {
-    width: 35%;
-    background-color: #ffffff;
-    font-size: 18px;
+.attendance-detail__cell--label {
+    white-space: nowrap;
+    padding-left: 16px;
+    width: 20%;
+    font-weight: normal;
+}
+
+.attendance-detail__cell--clock {
+    width: 30%;
+}
+
+.attendance-detail__cell--tilde {
+    width: 5%;
+    text-align: center;
+    padding: 0;
 }
 
 

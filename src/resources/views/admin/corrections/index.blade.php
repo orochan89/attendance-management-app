@@ -35,23 +35,23 @@
             <tbody class="request-list__tbody">
                 @forelse ($corrections as $correction)
                     <tr class="request-list__row">
-                        <td class="request-list__cell">
+                        <td class="request-list__cell request-list__cell--status">
                             {{ $correction->status === 'pending' ? '承認待ち' : '承認済み' }}
                         </td>
-                        <td class="request-list__cell">
+                        <td class="request-list__cell request-list__cell--name">
                             {{ $correction->user->name ?? '不明なユーザー' }}
                         </td>
-                        <td class="request-list__cell">
+                        <td class="request-list__cell request-list__cell--day">
                             {{ optional($correction->attendance->date)->format('Y/m/d') ?? '-' }}
                         </td>
-                        <td class="request-list__cell">
+                        <td class="request-list__cell request-list__cell--reason">
                             {{ $correction->reason ?? '-' }}
                         </td>
-                        <td class="request-list__cell">
+                        <td class="request-list__cell request-list__cell--day">
                             {{ $correction->created_at->format('Y/m/d') }}
                         </td>
-                        <td class="request-list__cell">
-                            <a class="request-list__link"
+                        <td class="request-list__cell request-list__cell--detail">
+                            <a class="request-list__cell--link"
                                 href="{{ route('admin.request.approve.show', $correction->id) }}">詳細</a>
                         </td>
                     </tr>

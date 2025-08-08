@@ -14,7 +14,8 @@
 
         <div class="attendance-list__header">
             <form class="attendance-list__navigation" action="" method="GET">
-                <a class="attendance-list__nav-button" href="{{ route('admin.attendance.list', ['date' => $prevDate]) }}">
+                <a class="attendance-list__nav-button--prev"
+                    href="{{ route('admin.attendance.list', ['date' => $prevDate]) }}">
                     前日
                 </a>
 
@@ -25,7 +26,8 @@
                     </p>
                 </div>
 
-                <a class="attendance-list__nav-button" href="{{ route('admin.attendance.list', ['date' => $nextDate]) }}">
+                <a class="attendance-list__nav-button--next"
+                    href="{{ route('admin.attendance.list', ['date' => $nextDate]) }}">
                     翌日
                 </a>
             </form>
@@ -45,23 +47,24 @@
             <tbody class="attendance-list__tbody">
                 @forelse ($attendances as $attendance)
                     <tr class="attendance-list__row">
-                        <td class="attendance-list__cell">
+                        <td class="attendance-list__cell attendance-list__cell--name">
                             {{ $attendance['user_name'] }}
                         </td>
-                        <td class="attendance-list__cell">
+                        <td class="attendance-list__cell attendance-list__cell--time">
                             {{ $attendance['clock_in'] }}
                         </td>
-                        <td class="attendance-list__cell">
+                        <td class="attendance-list__cell attendance-list__cell--time">
                             {{ $attendance['clock_out'] }}
                         </td>
-                        <td class="attendance-list__cell">
+                        <td class="attendance-list__cell attendance-list__cell--time">
                             {{ $attendance['break_time'] }}
                         </td>
-                        <td class="attendance-list__cell">
+                        <td class="attendance-list__cell attendance-list__cell--time">
                             {{ $attendance['work_time'] }}
                         </td>
-                        <td class="attendance-list__cell">
-                            <a href="{{ route('admin.attendance.show', $attendance['id']) }}">詳細</a>
+                        <td class="attendance-list__cell attendance-list__cell--detail">
+                            <a class="attendance-list__cell--link"
+                                href="{{ route('admin.attendance.show', $attendance['id']) }}">詳細</a>
                         </td>
                     </tr>
                 @empty

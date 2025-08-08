@@ -102,13 +102,35 @@ body {
 
 .attendance-list__row.attendance-list__row--header {
     background-color: #ffffff;
-    font-weight: bold;
     color: #000000;
 }
 
+.attendance-list__row--header .attendance-list__cell {
+    font-weight: normal;
+}
+
 .attendance-list__cell {
+    padding: 5px;
     background-color: #ffffff;
     font-size: 18px;
 }
 
+.attendance-list__cell--name {
+    width: 20%;
+    padding-left: 16px;
+}
+
+.attendance-list__cell--time {
+    width: 12%;
+}
+
+.attendance-list__cell--detail {
+    width: 12%;
+}
+
+.attendance-list__cell--link {
+    text-decoration: none;
+    color: #000000;
+    font-weight: bold;
+}
 

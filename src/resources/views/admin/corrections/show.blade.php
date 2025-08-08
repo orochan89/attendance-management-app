@@ -19,7 +19,7 @@
                     {{-- 名前 --}}
                     <tr class="attendance-detail__row">
                         <th class="attendance-detail__cell attendance-detail__cell--label">名前</th>
-                        <td class="attendance-detail__cell" colspan="2">
+                        <td class="attendance-detail__cell" colspan="3">
                             {{ $correction->user->name ?? '不明なユーザー' }}
                         </td>
                     </tr>
@@ -30,6 +30,7 @@
                         <td class="attendance-detail__cell">
                             {{ \Carbon\Carbon::parse($correction->attendance->date)->format('Y年') }}
                         </td>
+                        <td class="attendance-detail__cell"></td>
                         <td class="attendance-detail__cell">
                             {{ \Carbon\Carbon::parse($correction->attendance->date)->format('n月j日') }}
                         </td>
@@ -38,14 +39,15 @@
                     {{-- 出勤・退勤 --}}
                     <tr class="attendance-detail__row">
                         <th class="attendance-detail__cell attendance-detail__cell--label">出勤・退勤</th>
-                        <td class="attendance-detail__cell">
+                        <td class="attendance-detail__cell attendance-detail__cell--clock">
                             <p>
                                 {{ $correction->requested_clock_in
                                     ? \Carbon\Carbon::parse($correction->requested_clock_in)->format('H:i')
                                     : '-' }}
                             </p>
                         </td>
-                        <td class="attendance-detail__cell">
+                        <td class="attendance-detail__cell attendance-detail__cell--tilde">〜</td>
+                        <td class="attendance-detail__cell attendance-detail__cell--clock">
                             <p>
                                 {{ $correction->requested_clock_out
                                     ? \Carbon\Carbon::parse($correction->requested_clock_out)->format('H:i')
@@ -61,12 +63,13 @@
                                 <th class="attendance-detail__cell attendance-detail__cell--label">
                                     休憩{{ $index + 1 }}
                                 </th>
-                                <td class="attendance-detail__cell">
+                                <td class="attendance-detail__cell attendance-detail__cell--clock">
                                     <p>
                                         {{ $break->requested_break_start ? \Carbon\Carbon::parse($break->requested_break_start)->format('H:i') : '-' }}
                                     </p>
                                 </td>
-                                <td class="attendance-detail__cell">
+                                <td class="attendance-detail__cell attendance-detail__cell--tilde">〜</td>
+                                <td class="attendance-detail__cell attendance-detail__cell--clock">
                                     <p>
                                         {{ $break->requested_break_end ? \Carbon\Carbon::parse($break->requested_break_end)->format('H:i') : '-' }}
                                     </p>
@@ -76,14 +79,14 @@
                     @else
                         <tr class="attendance-detail__row">
                             <th class="attendance-detail__cell attendance-detail__cell--label">休憩</th>
-                            <td class="attendance-detail__cell" colspan="2">申請された休憩はありません。</td>
+                            <td class="attendance-detail__cell" colspan="3">申請された休憩はありません。</td>
                         </tr>
                     @endif
 
                     {{-- 備考 --}}
                     <tr class="attendance-detail__row">
                         <th class="attendance-detail__cell attendance-detail__cell--label">申請理由</th>
-                        <td class="attendance-detail__cell" colspan="2">
+                        <td class="attendance-detail__cell" colspan="3">
                             <p>{{ $correction->reason ?? '未記入' }}</p>
                         </td>
                     </tr>

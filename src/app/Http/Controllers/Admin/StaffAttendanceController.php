@@ -88,10 +88,10 @@ class StaffAttendanceController extends Controller
 
             foreach ($attendances as $attendance) {
                 $date = \Carbon\Carbon::parse($attendance->date)->format('Y-m-d');
-                $in = optional($attendance->clock_in_time)->format('H:i') ?? '';
-                $out = optional($attendance->clock_out_time)->format('H:i') ?? '';
+                $in = $attendance->clock_in_time ? \Carbon\Carbon::parse($attendance->clock_in_time)->format('H:i') : '';
+                $out = $attendance->clock_out_time ? \Carbon\Carbon::parse($attendance->clock_out_time)->format('H:i') : '';
 
-                $breakMinutes = $attendance->breaks->reduce(function ($carry, $break) {
+                $breakMinutes = (int) $attendance->breaks->reduce(function ($carry, $break) {
                     if ($break->break_start && $break->break_end) {
                         return $carry + \Carbon\Carbon::parse($break->break_start)->diffInMinutes(\Carbon\Carbon::parse($break->break_end));
                     }
@@ -99,7 +99,7 @@ class StaffAttendanceController extends Controller
                 }, 0);
 
                 $workMinutes = ($attendance->clock_in_time && $attendance->clock_out_time)
-                    ? \Carbon\Carbon::parse($attendance->clock_in_time)->diffInMinutes(\Carbon\Carbon::parse($attendance->clock_out_time)) - $breakMinutes
+                    ? max(\Carbon\Carbon::parse($attendance->clock_in_time)->diffInMinutes(\Carbon\Carbon::parse($attendance->clock_out_time)) - $breakMinutes, 0)
                     : '';
 
                 fputcsv($stream, [$date, $in, $out, $breakMinutes, $workMinutes]);

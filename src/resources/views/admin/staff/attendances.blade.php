@@ -13,7 +13,7 @@
         </h1>
         <div class="attendance-list__header">
             <div class="attendance-list__navigation">
-                <a class="attendance-list__nav-button"
+                <a class="attendance-list__nav-button--prev"
                     href="{{ route('admin.staff.attendance', ['id' => $user->id, 'month' => $prevMonth]) }}">
                     前月
                 </a>
@@ -25,7 +25,7 @@
                     </p>
                 </div>
 
-                <a class="attendance-list__nav-button"
+                <a class="attendance-list__nav-button--next"
                     href="{{ route('admin.staff.attendance', ['id' => $user->id, 'month' => $nextMonth]) }}">
                     翌月
                 </a>
@@ -45,21 +45,21 @@
             <tbody class="attendance-list__tbody">
                 @foreach ($dates as $day)
                     <tr class="attendance-list__row">
-                        <td class="attendance-list__cell">{{ $day['formatted'] }}</td>
-                        <td class="attendance-list__cell">
+                        <td class="attendance-list__cell attendance-list__cell--day">{{ $day['formatted'] }}</td>
+                        <td class="attendance-list__cell attendance-list__cell--time">
                             {{ $day['attendance']?->clock_in_time ? \Carbon\Carbon::parse($day['attendance']->clock_in_time)->format('H:i') : '' }}
                         </td>
-                        <td class="attendance-list__cell">
+                        <td class="attendance-list__cell attendance-list__cell--time">
                             {{ $day['attendance']?->clock_out_time ? \Carbon\Carbon::parse($day['attendance']->clock_out_time)->format('H:i') : '' }}
                         </td>
-                        <td class="attendance-list__cell">
+                        <td class="attendance-list__cell attendance-list__cell--time">
                             {{ $day['attendance']?->clock_in_time ? $day['attendance']->total_break_formatted : '' }}
                         </td>
-                        <td class="attendance-list__cell">
+                        <td class="attendance-list__cell attendance-list__cell--time">
                             {{ $day['attendance']?->clock_in_time ? $day['attendance']->work_time_formatted : '' }}
                         </td>
-                        <td class="attendance-list__cell">
-                            <a
+                        <td class="attendance-list__cell attendance-list__cell--detail">
+                            <a class="attendance-list__cell--link"
                                 href="{{ route('admin.attendance.show', ['id' => $day['attendance'] ? $day['attendance']->id : 'date-' . \Carbon\Carbon::parse($day['date'])->format('Ymd') . '-user-' . $user->id]) }}">
                                 詳細
                             </a>

@@ -46,11 +46,34 @@ body {
 
 .staff-list__row.staff-list__row--header {
     background-color: #ffffff;
-    font-weight: bold;
     color: #000000;
 }
 
+.staff-list__row--header .staff-list__cell {
+    font-weight: normal;
+}
+
 .staff-list__cell {
+    padding: 5px;
     background-color: #ffffff;
     font-size: 18px;
+}
+
+.staff-list__cell--name {
+    width: 20%;
+    padding-left: 16px;
+}
+
+.staff-list__cell--email {
+    width: 60%;
+}
+
+.staff-list__cell--detail {
+    width: 20%;
+}
+
+.staff-list__cell--link {
+    text-decoration: none;
+    color: #000000;
+    font-weight: bold;
 }

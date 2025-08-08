@@ -18,7 +18,7 @@
                     {{-- 名前 --}}
                     <tr class="attendance-detail__row">
                         <th class="attendance-detail__cell attendance-detail__cell--label">名前</th>
-                        <td class="attendance-detail__cell" colspan="2">
+                        <td class="attendance-detail__cell" colspan="3">
                             {{ $attendance->user->name ?? '不明なユーザー' }}
                         </td>
                     </tr>
@@ -27,6 +27,7 @@
                     <tr class="attendance-detail__row">
                         <th class="attendance-detail__cell attendance-detail__cell--label">日付</th>
                         <td class="attendance-detail__cell">{{ $attendance->date->format('Y年') }}</td>
+                        <td class="attendance-detail__cell"></td>
                         <td class="attendance-detail__cell">{{ $attendance->date->format('n月j日') }}</td>
                     </tr>
 
@@ -34,14 +35,15 @@
                     <tr class="attendance-detail__row">
                         <th class="attendance-detail__cell attendance-detail__cell--label">出勤・退勤</th>
                         @if (is_null($correction) || optional($correction)->status === 'approved')
-                            <td class="attendance-detail__cell">
+                            <td class="attendance-detail__cell attendance-detail__cell--clock">
                                 <input class="attendance-detail__time-input" type="time" name="requested_clock_in"
                                     value="{{ old('clock_in_time', $clockIn) }}">
                                 @error('requested_clock_in')
                                     <p class="attendance-detail__error">{{ $message }}</p>
                                 @enderror
                             </td>
-                            <td class="attendance-detail__cell">
+                            <td class="attendance-detail__cell attendance-detail__cell--tilde">〜</td>
+                            <td class="attendance-detail__cell attendance-detail__cell--clock">
                                 <input class="attendance-detail__time-input" type="time" name="requested_clock_out"
                                     value="{{ old('clock_out_time', $clockOut) }}">
                                 @error('requested_clock_out')
@@ -49,11 +51,12 @@
                                 @enderror
                             </td>
                         @else
-                            <td class="attendance-detail__cell">
+                            <td class="attendance-detail__cell attendance-detail__cell--clock">
                                 <p>{{ optional($correction)->requested_clock_in ? \Carbon\Carbon::parse($correction->requested_clock_in)->format('H:i') : '' }}
                                 </p>
                             </td>
-                            <td class="attendance-detail__cell">
+                            <td class="attendance-detail__cell attendance-detail__cell--tilde">〜</td>
+                            <td class="attendance-detail__cell attendance-detail__cell--clock">
                                 <p>{{ optional($correction)->requested_clock_out ? \Carbon\Carbon::parse($correction->requested_clock_out)->format('H:i') : '' }}
                                 </p>
                             </td>
@@ -65,7 +68,7 @@
                             <th class="attendance-detail__cell attendance-detail__cell--label">{{ $break['label'] }}</th>
 
                             @if (is_null($correction) || $correction->status === 'approved')
-                                <td class="attendance-detail__cell">
+                                <td class="attendance-detail__cell attendance-detail__cell--clock">
                                     <input class="attendance-detail__time-input" type="time"
                                         name="break{{ $index + 1 }}_start"
                                         value="{{ old("break{$index}_start", $break['start_value']) }}">
@@ -73,7 +76,8 @@
                                         <div class="attendance-detail__error">{{ $message }}</div>
                                     @enderror
                                 </td>
-                                <td class="attendance-detail__cell">
+                                <td class="attendance-detail__cell attendance-detail__cell--tilde">〜</td>
+                                <td class="attendance-detail__cell attendance-detail__cell--clock">
                                     <input class="attendance-detail__time-input" type="time"
                                         name="break{{ $index + 1 }}_end"
                                         value="{{ old("break{$index}_end", $break['end_value']) }}">
@@ -82,10 +86,11 @@
                                     @enderror
                                 </td>
                             @else
-                                <td class="attendance-detail__cell">
+                                <td class="attendance-detail__cell attendance-detail__cell--clock">
                                     <p>{{ $break['start_value'] }}</p>
                                 </td>
-                                <td class="attendance-detail__cell">
+                                <td class="attendance-detail__cell attendance-detail__cell--tilde">〜</td>
+                                <td class="attendance-detail__cell attendance-detail__cell--clock">
                                     <p>{{ $break['end_value'] }}</p>
                                 </td>
                             @endif
@@ -98,7 +103,7 @@
                             <th class="attendance-detail__cell attendance-detail__cell--label">
                                 休憩{{ $breaks->count() + 1 }}
                             </th>
-                            <td class="attendance-detail__cell">
+                            <td class="attendance-detail__cell attendance-detail__cell--clock">
                                 <input class="attendance-detail__time-input" type="time"
                                     name="break{{ $breaks->count() + 1 }}_start"
                                     value="{{ old('break' . ($breaks->count() + 1) . '_start') }}">
@@ -106,7 +111,8 @@
                                     <div class="attendance-detail__error">{{ $message }}</div>
                                 @enderror
                             </td>
-                            <td class="attendance-detail__cell">
+                            <td class="attendance-detail__cell attendance-detail__cell--tilde">〜</td>
+                            <td class="attendance-detail__cell attendance-detail__cell--clock">
                                 <input class="attendance-detail__time-input" type="time"
                                     name="break{{ $breaks->count() + 1 }}_end"
                                     value="{{ old('break' . ($breaks->count() + 1) . '_end') }}">
@@ -120,7 +126,7 @@
                     {{-- 備考 --}}
                     <tr class="attendance-detail__row">
                         <th class="attendance-detail__cell attendance-detail__cell--label">備考</th>
-                        <td class="attendance-detail__cell" colspan="2">
+                        <td class="attendance-detail__cell" colspan="3">
                             @if (is_null($correction) || optional($correction)->status === 'approved')
                                 <textarea class="attendance-detail__textarea" name="reason" rows="3">{{ old('reason', optional($correction)->reason ?? '') }}</textarea>
                                 @error('reason')

@@ -20,10 +20,10 @@
             <tbody class="staff-list__tbody">
                 @forelse ($users as $user)
                     <tr class="staff-list__row">
-                        <td class="staff-list__cell">{{ $user->name }}</td>
-                        <td class="staff-list__cell">{{ $user->email }}</td>
-                        <td class="staff-list__cell">
-                            <a class="staff-list__link" href="{{ route('admin.staff.attendance', $user->id) }}">
+                        <td class="staff-list__cell staff-list__cell--name">{{ $user->name }}</td>
+                        <td class="staff-list__cell staff-list__cell--email">{{ $user->email }}</td>
+                        <td class="staff-list__cell staff-list__cell--detail">
+                            <a class="staff-list__cell--link" href="{{ route('admin.staff.attendance', $user->id) }}">
                                 詳細
                             </a>
                         </td>
