@@ -90,17 +90,58 @@
 
             <div class="attendance-detail__actions">
                 @if ($correction->status === 'pending')
-                    <button class="attendance-detail__button attendance-detail__button--submit" type="submit"
-                        name="action" value="approve">
+                    <button id="approve-button" class="attendance-detail__button attendance-detail__button--submit"
+                        type="button"
+                        data-url="{{ route('admin.request.approve.submit', ['attendance_correct_request' => $correction->id]) }}">
                         承認
                     </button>
                 @else
-                    <button class="attendance-detail__button attendance-detail__button--submit" type="submit"
-                        name="action" value="approve" disabled>
+                    <button class="attendance-detail__button attendance-detail__button--submit" type="button" disabled>
                         承認済み
                     </button>
                 @endif
             </div>
         </form>
     </div>
+@endsection
+
+@section('js')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const button = document.getElementById('approve-button');
+            if (!button) return;
+
+            button.addEventListener('click', function() {
+                if (!confirm('この申請を承認しますか？')) return;
+
+                button.disabled = true;
+                button.textContent = '承認中...';
+
+                fetch(button.dataset.url, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            action: 'approve'
+                        })
+                    })
+                    .then(res => {
+                        if (!res.ok) throw new Error('エラー');
+                        return res.json();
+                    })
+                    .then(data => {
+                        button.textContent = '承認済み';
+                        button.disabled = true;
+                    })
+                    .catch(() => {
+                        button.textContent = '承認';
+                        button.disabled = false;
+                        alert('承認に失敗しました');
+                    });
+            });
+        });
+    </script>
 @endsection

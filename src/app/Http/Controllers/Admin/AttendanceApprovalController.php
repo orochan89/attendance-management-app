@@ -54,8 +54,10 @@ class AttendanceApprovalController extends Controller
         $correction->reviewed_at = now();
         $correction->save();
 
-        return redirect()
-            ->back()
-            ->with('success', '修正申請を承認しました。');
+        if ($request->ajax() || $request->wantsJson() || $request->expectsJson()) {
+            return response()->json(['status' => 'ok']);
+        }
+
+        return redirect()->back()->with('success', '修正申請を承認しました。');
     }
 }
