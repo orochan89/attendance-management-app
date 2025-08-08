@@ -14,7 +14,8 @@ class Attendance extends Model
         'date',
         'clock_in_time',
         'clock_out_time',
-        'status'
+        'status',
+        'reason'
     ];
 
     protected $casts = [

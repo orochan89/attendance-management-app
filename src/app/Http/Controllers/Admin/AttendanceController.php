@@ -103,6 +103,7 @@ class AttendanceController extends Controller
 
         $attendance->clock_in_time = $request->input('clock_in_time') ?: null;
         $attendance->clock_out_time = $request->input('clock_out_time') ?: null;
+        $attendance->reason = $request->input('reason') ?: null;
         $attendance->save();
 
         $breaksInput = $request->input('breaks', []);

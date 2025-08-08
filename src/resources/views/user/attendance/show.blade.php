@@ -34,7 +34,7 @@
                         @if (is_null($correction) || optional($correction)->status === 'approved')
                             <td class="attendance-detail__cell attendance-detail__cell--clock">
                                 <input class="attendance-detail__time-input" type="time" name="requested_clock_in"
-                                    value="{{ old('clock_in_time', $clockIn) }}">
+                                    value="{{ old('requested_clock_in', $clockIn) }}">
                                 @error('requested_clock_in')
                                     <p class="attendance-detail__error">{{ $message }}</p>
                                 @enderror
@@ -42,7 +42,7 @@
                             <td class="attendance-detail__cell attendance-detail__cell--tilde">〜</td>
                             <td class="attendance-detail__cell attendance-detail__cell--clock">
                                 <input class="attendance-detail__time-input" type="time" name="requested_clock_out"
-                                    value="{{ old('clock_out_time', $clockOut) }}">
+                                    value="{{ old('requested_clock_out', $clockOut) }}">
                                 @error('requested_clock_out')
                                     <p class="attendance-detail__error">{{ $message }}</p>
                                 @enderror
