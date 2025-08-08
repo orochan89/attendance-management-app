@@ -126,9 +126,15 @@ cp .env .env.testing
 3. .env.testing 内の環境変数を以下の通り変更
 
 ```env
+APP_NAME=Laravel
 APP_ENV=test
 APP_KEY=
+APP_DEBUG=true
+APP_URL=http://localhost
 
+DB_CONNECTION=mysql
+DB_HOST=mysql
+DB_PORT=3306
 DB_DATABASE=demo_test
 DB_USERNAME=root
 DB_PASSWORD=root
