@@ -123,9 +123,12 @@ class AdminCorrectionApprovalTest extends TestCase
         $attendance = $target->attendance;
 
         $response = $this->actingAs($this->admin)
-            ->post(route('admin.request.approve.submit', ['attendance_correct_request' => $target->id]));
+            ->postJson(route('admin.request.approve.submit', ['attendance_correct_request' => $target->id]), [
+                'action' => 'approve',
+            ]);
 
-        $response->assertRedirect(route('admin.request.list'));
+        $response->assertStatus(200)
+            ->assertJson(['status' => 'ok']);
 
         $this->assertDatabaseHas('attendance_corrections', [
             'id' => $target->id,

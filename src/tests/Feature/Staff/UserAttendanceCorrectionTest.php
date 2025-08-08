@@ -119,7 +119,23 @@ class UserAttendanceCorrectionTest extends TestCase
             'attendance_id' => $this->attendance->id,
             'user_id' => $this->user->id,
             'status' => 'pending',
+            'reason' => '修正申請テスト',
         ]);
+
+        $admin = User::factory()->create(['role' => 'admin']);
+        $this->actingAs($admin);
+
+        $response = $this->get('/admin/stamp_correction_request/list');
+        $response->assertSee($this->user->name);
+        $response->assertSee('修正申請テスト');
+
+        $correction = AttendanceCorrection::where('attendance_id', $this->attendance->id)->first();
+
+        $response = $this->get("/admin/stamp_correction_request/approve/{$correction->id}");
+        $response->assertSee($this->user->name);
+        $response->assertSee('修正申請テスト');
+        $response->assertSee('09:00');
+        $response->assertSee('18:00');
     }
 
     // testcase ID:11 「承認待ち」にログインユーザーが行った申請が全て表示されている
@@ -140,16 +156,23 @@ class UserAttendanceCorrectionTest extends TestCase
     // testcase ID:11 「承認済み」に管理者が承認した修正申請が全て表示されている
     public function test_approved_requests_are_displayed()
     {
-        $correction = AttendanceCorrection::factory()->create([
-            'user_id' => $this->user->id,
-            'attendance_id' => $this->attendance->id,
-            'status' => 'approved',
-            'reason' => '承認済み理由'
-        ]);
+        $reasons = ['承認済み理由1', '承認済み理由2', '承認済み理由3'];
 
-        $response = $this->get('stamp_correction_request/list?status=approved');
+        foreach ($reasons as $reason) {
+            AttendanceCorrection::factory()->create([
+                'user_id' => $this->user->id,
+                'attendance_id' => $this->attendance->id,
+                'status' => 'approved',
+                'reason' => $reason,
+            ]);
+        }
+
+        $response = $this->get('/stamp_correction_request/list?status=approved');
         $response->assertStatus(200);
-        $response->assertSee($correction->reason);
+
+        foreach ($reasons as $reason) {
+            $response->assertSee($reason);
+        }
     }
 
     // testcase ID:11 各申請の「詳細」を押下すると申請詳細画面に遷移する

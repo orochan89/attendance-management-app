@@ -62,6 +62,7 @@ class WorkStartTest extends TestCase
     // testcase ID:6 出勤時刻が管理画面で確認できる
     public function test_clock_in_time_is_visible_on_staff_attendance_list()
     {
+        $admin = User::factory()->create(['role' => 'admin'])->first();
         $user = User::factory()->create()->first();
         Attendance::factory()->create([
             'user_id' => $user->id,
@@ -81,7 +82,9 @@ class WorkStartTest extends TestCase
 
         $clockInFormatted = optional($updatedAttendance->clock_in_time)->format('H:i');
 
-        $response = $this->actingAs($user)->get('/attendance/list?month=' . now()->format('Y-m'));
+        $response = $this->actingAs($admin)->get("/admin/attendance/staff/{$user->id}");
+
+        $response->assertStatus(200);
         $response->assertSee($clockInFormatted);
     }
 }
