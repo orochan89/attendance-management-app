@@ -4,25 +4,29 @@
 
 ### Docker ビルド
 
-1. git clone git@github.com:orochan89/attendance-management-app.git
-2. docker compose up -d --build
+1. GitHubリポジトリをローカル環境にコピー
+```bash
+git clone git@github.com:orochan89/attendance-management-app.git
+```
+
+2. Dockerコンテナのビルドと起動(バックグラウンド)
+```bash
+docker compose up -d --build
+```
 
 ### Laravel 環境構築
 
 1. PHP コンテナに入る
-
 ```bash
 docker-compose exec php bash
 ```
 
 2. 依存パッケージをインストール
-
 ```bash
 composer install
 ```
 
 3. .env.example をコピーして .env を作成
-
 ```bash
 cp .env.example .env
 ```
@@ -47,19 +51,16 @@ MAIL_FROM_NAME="${APP_NAME}"
 </code></pre>
 
 5. アプリケーションキーを生成
-
 ```bash
 php artisan key:generate
 ```
 
 6. データベースのマイグレーションを実行
-
 ```bash
 php artisan migrate
 ```
 
 7. 初期データのシーディングを実行
-
 ```bash
 php artisan db:seed
 ```
@@ -102,13 +103,11 @@ http://localhost:8025/
 ### テスト用 .env.testing ファイルの作成
 
 1. PHP コンテナに入る
-
 ```bash
 docker-compose exec php bash
 ```
 
 2. .env をコピーして .env.testing を作成 **開発環境構築で作成した .env ファイルをコピーする事**
-
 ```bash
 cp .env .env.testing
 ```
@@ -125,18 +124,51 @@ DB_DATABASE=demo_test
 
 ### テスト用データベースの作成
 
-1. docker-compose exec mysql bash
-2. mysql -u root -p
-3. password:root
-4. CREATE DATABASE demo_test;
+1. MYSQL コンテナに入る
+```bash
+docker-compose exec mysql bash
+```
+
+2. MYSQL にログイン
+```bash
+mysql -u root -p
+```
+
+3. MYSQL パスワードを入力
+```bash
+root
+```
+
+4. テスト用データベースを作成
+```bash
+CREATE DATABASE demo_test;
+```
 
 ### テスト環境のセットアップ
 
-1. docker-compose exec php bash
-2. php artisan key:generate --env=testing
-3. php artisan config:clear
-4. php artisan migrate --env=testing
+1. PHP コンテナに入る
+```bash
+docker-compose exec php bash
+```
+
+2. アプリケーションキーを生成
+```bash
+php artisan key:generate --env=testing
+```
+
+3. 設定キャッシュを削除
+```bash
+php artisan config:clear
+```
+
+4. 初期データのシーディングを実行
+```bash
+php artisan migrate --env=testing
+```
 
 ### テストの実行
 
-1. php artisan test
+1. テストの実行
+```bash
+php artisan test
+```
