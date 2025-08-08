@@ -16,7 +16,6 @@
             <table class="attendance-detail__table">
                 <tbody class="attendance-detail__tbody">
 
-                    {{-- 名前 --}}
                     <tr class="attendance-detail__row">
                         <th class="attendance-detail__cell attendance-detail__cell--label">名前</th>
                         <td class="attendance-detail__cell" colspan="3">
@@ -24,7 +23,6 @@
                         </td>
                     </tr>
 
-                    {{-- 日付 --}}
                     <tr class="attendance-detail__row">
                         <th class="attendance-detail__cell attendance-detail__cell--label">日付</th>
                         <td class="attendance-detail__cell">
@@ -36,7 +34,6 @@
                         </td>
                     </tr>
 
-                    {{-- 出勤・退勤 --}}
                     <tr class="attendance-detail__row">
                         <th class="attendance-detail__cell attendance-detail__cell--label">出勤・退勤</th>
                         <td class="attendance-detail__cell attendance-detail__cell--clock">
@@ -56,7 +53,6 @@
                         </td>
                     </tr>
 
-                    {{-- 休憩欄（correction内の休憩修正を動的に表示） --}}
                     @if ($correction->breakCorrections->count() > 0)
                         @foreach ($correction->breakCorrections as $index => $break)
                             <tr class="attendance-detail__row">
@@ -83,7 +79,6 @@
                         </tr>
                     @endif
 
-                    {{-- 備考 --}}
                     <tr class="attendance-detail__row">
                         <th class="attendance-detail__cell attendance-detail__cell--label">申請理由</th>
                         <td class="attendance-detail__cell" colspan="3">
@@ -93,7 +88,6 @@
                 </tbody>
             </table>
 
-            {{-- 承認ボタン --}}
             <div class="attendance-detail__actions">
                 @if ($correction->status === 'pending')
                     <button class="attendance-detail__button attendance-detail__button--submit" type="submit"

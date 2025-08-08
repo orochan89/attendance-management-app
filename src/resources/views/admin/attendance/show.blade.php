@@ -15,7 +15,6 @@
             <table class="attendance-detail__table">
                 <tbody class="attendance-detail__tbody">
 
-                    {{-- 名前 --}}
                     <tr class="attendance-detail__row">
                         <th class="attendance-detail__cell attendance-detail__cell--label">名前</th>
                         <td class="attendance-detail__cell" colspan="3">
@@ -23,7 +22,6 @@
                         </td>
                     </tr>
 
-                    {{-- 日付 --}}
                     <tr class="attendance-detail__row">
                         <th class="attendance-detail__cell attendance-detail__cell--label">日付</th>
                         <td class="attendance-detail__cell">{{ $attendance->date->format('Y年') }}</td>
@@ -31,7 +29,6 @@
                         <td class="attendance-detail__cell">{{ $attendance->date->format('n月j日') }}</td>
                     </tr>
 
-                    {{-- 出勤・退勤 --}}
                     <tr class="attendance-detail__row">
                         <th class="attendance-detail__cell attendance-detail__cell--label">出勤・退勤</th>
                         <td class="attendance-detail__cell attendance-detail__cell--clock">
@@ -51,7 +48,6 @@
                         </td>
                     </tr>
 
-                    {{-- 登録済み休憩欄 --}}
                     @foreach ($breaks as $index => $break)
                         <tr class="attendance-detail__row">
                             <th class="attendance-detail__cell attendance-detail__cell--label">
@@ -77,7 +73,6 @@
                         </tr>
                     @endforeach
 
-                    {{-- 新規追加用の休憩欄（1行） --}}
                     <tr class="attendance-detail__row">
                         <th class="attendance-detail__cell attendance-detail__cell--label">
                             休憩{{ count($breaks) + 1 }}
@@ -99,7 +94,6 @@
                         @enderror
                     </tr>
 
-                    {{-- 備考 --}}
                     <tr class="attendance-detail__row">
                         <th class="attendance-detail__cell attendance-detail__cell--label">備考</th>
                         <td class="attendance-detail__cell" colspan="3">
@@ -112,7 +106,6 @@
                 </tbody>
             </table>
 
-            {{-- ボタン --}}
             <div class="attendance-detail__actions">
                 <button class="attendance-detail__button attendance-detail__button--submit" type="submit" name="action"
                     value="update">

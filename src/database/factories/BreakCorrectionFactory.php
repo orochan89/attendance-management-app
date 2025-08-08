@@ -4,7 +4,6 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\AttendanceCorrection;
-use App\Models\BreakCorrection;
 
 class BreakCorrectionFactory extends Factory
 {

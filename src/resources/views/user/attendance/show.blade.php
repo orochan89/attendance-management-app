@@ -15,7 +15,6 @@
             <table class="attendance-detail__table">
                 <tbody class="attendance-detail__tbody">
 
-                    {{-- 名前 --}}
                     <tr class="attendance-detail__row">
                         <th class="attendance-detail__cell attendance-detail__cell--label">名前</th>
                         <td class="attendance-detail__cell" colspan="3">
@@ -23,7 +22,6 @@
                         </td>
                     </tr>
 
-                    {{-- 日付 --}}
                     <tr class="attendance-detail__row">
                         <th class="attendance-detail__cell attendance-detail__cell--label">日付</th>
                         <td class="attendance-detail__cell">{{ $attendance->date->format('Y年') }}</td>
@@ -31,7 +29,6 @@
                         <td class="attendance-detail__cell">{{ $attendance->date->format('n月j日') }}</td>
                     </tr>
 
-                    {{-- 出勤・退勤 --}}
                     <tr class="attendance-detail__row">
                         <th class="attendance-detail__cell attendance-detail__cell--label">出勤・退勤</th>
                         @if (is_null($correction) || optional($correction)->status === 'approved')
@@ -97,7 +94,6 @@
                         </tr>
                     @endforeach
 
-                    {{-- 追加用の空の休憩フィールド（pending時は非表示） --}}
                     @if (is_null($correction) || optional($correction)->status === 'approved')
                         <tr class="attendance-detail__row">
                             <th class="attendance-detail__cell attendance-detail__cell--label">
@@ -123,7 +119,6 @@
                         </tr>
                     @endif
 
-                    {{-- 備考 --}}
                     <tr class="attendance-detail__row">
                         <th class="attendance-detail__cell attendance-detail__cell--label">備考</th>
                         <td class="attendance-detail__cell" colspan="3">
@@ -140,7 +135,6 @@
                 </tbody>
             </table>
 
-            {{-- ボタン --}}
             <div class="attendance-detail__actions">
                 @if (is_null($correction) || optional($correction)->status === 'approved')
                     <button class="attendance-detail__button attendance-detail__button--submit" type="submit"

@@ -75,7 +75,6 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
     Route::post('/logout', [AdminAuthController::class, 'destroy'])->name('logout');
 
-    // auth に変更し、role=adminをミドルウェアでチェック
     Route::middleware(['auth', 'admin'])->group(function () {
         Route::get('/attendance/list', [AdminAttendanceController::class, 'index'])->name('attendance.list');
 
