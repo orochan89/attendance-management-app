@@ -28,10 +28,8 @@ cp .env.example .env
 ```
 
 4. .env 内の環境変数を以下の通り変更
-<pre><code class="language-env">
 
-```env
-
+<pre><code class="language-env">```env
 DB_CONNECTION=mysql
 DB_HOST=mysql
 DB_PORT=3306
@@ -47,10 +45,7 @@ MAIL_PASSWORD=null
 MAIL_ENCRYPTION=null
 MAIL_FROM_ADDRESS=noreply@example.com
 MAIL_FROM_NAME="${APP_NAME}"
-
-```
-
-</code></pre>
+```</code></pre>
 
 5. アプリケーションキーを生成
 
