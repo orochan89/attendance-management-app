@@ -24,14 +24,12 @@ class AdminUpdateAttendanceRequest extends FormRequest
      */
     public function rules(): array
     {
-        // 基本ルール
         $rules = [
             'clock_in_time'  => ['required', 'date_format:H:i'],
             'clock_out_time' => ['required', 'date_format:H:i'],
             'reason'              => ['required', 'string', 'max:255'],
         ];
 
-        // 休憩フィールドの動的追加
         foreach ($this->getBreakFields() as $field) {
             $rules[$field] = ['nullable', 'date_format:H:i'];
         }

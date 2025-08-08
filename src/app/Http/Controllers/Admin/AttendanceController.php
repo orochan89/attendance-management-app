@@ -7,7 +7,6 @@ use App\Http\Requests\Admin\AdminUpdateAttendanceRequest;
 use Illuminate\Http\Request;
 use App\Models\Attendance;
 use Carbon\Carbon;
-use Illuminate\Support\Str;
 
 class AttendanceController extends Controller
 {

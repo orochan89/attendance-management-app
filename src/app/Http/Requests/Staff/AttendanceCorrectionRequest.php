@@ -24,14 +24,12 @@ class AttendanceCorrectionRequest extends FormRequest
      */
     public function rules(): array
     {
-        // 基本ルール
         $rules = [
             'requested_clock_in'  => ['required', 'date_format:H:i'],
             'requested_clock_out' => ['required', 'date_format:H:i'],
             'reason'              => ['required', 'string', 'max:255'],
         ];
 
-        // 休憩フィールドの動的追加
         foreach ($this->getBreakFields() as $field) {
             $rules[$field] = ['nullable', 'date_format:H:i'];
         }

@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\Staff\AttendanceCorrectionRequest;
 use App\Models\Attendance;
 use App\Models\AttendanceCorrection;
-use App\Models\BreakCorrection;
 use App\Http\Controllers\Controller;
 
 class RequestController extends Controller
@@ -17,7 +16,7 @@ class RequestController extends Controller
         $status = $request->input('status', 'pending');
 
         if (!in_array($status, ['pending', 'approved'])) {
-            abort(404); // または redirect()->back();
+            abort(404);
         }
 
         $corrections = AttendanceCorrection::with('attendance')
@@ -33,7 +32,6 @@ class RequestController extends Controller
     {
         $attendance = Attendance::findOrFail($id);
 
-        // すでにpending申請がある場合はリダイレクト（※任意で追加）
         $pending = AttendanceCorrection::where('attendance_id', $attendance->id)
             ->where('status', 'pending')
             ->exists();
@@ -41,7 +39,6 @@ class RequestController extends Controller
             return redirect()->back()->with('error', 'すでに承認待ちの申請があります。');
         }
 
-        // 1. 勤怠修正データを作成
         $correction = AttendanceCorrection::create([
             'user_id'            => Auth::id(),
             'attendance_id'      => $attendance->id,
@@ -51,7 +48,6 @@ class RequestController extends Controller
             'status'             => 'pending'
         ]);
 
-        // 2. 休憩修正データをループで保存（★ここをリレーションで保存）
         foreach ($this->getBreakPairs($request) as $break) {
             if ($break['start'] || $break['end']) {
                 $correction->breakCorrections()->create([
@@ -65,9 +61,6 @@ class RequestController extends Controller
             ->with('success', '修正申請を送信しました。');
     }
 
-    /**
-     * 動的な breakX_start / breakX_end をペアで抽出
-     */
     private function getBreakPairs($request): array
     {
         $breaks = [];
