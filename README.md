@@ -10,32 +10,65 @@
 ### Laravel 環境構築
 
 1. PHP コンテナに入る
-   ```bash
-   docker-compose exec php bash
-   ```
-2. composer install
-3. cp .env.example .env
-4. .env 内の環境変数を以下の通り変更
 
-DB_CONNECTION=mysql  
-DB_HOST=mysql  
-DB_PORT=3306  
-DB_DATABASE=laravel_db  
-DB_USERNAME=laravel_user  
+```bash
+docker-compose exec php bash
+```
+
+2. 依存パッケージをインストール
+
+```bash
+composer install
+```
+
+3. .env.example をコピーして .env を作成
+
+```bash
+cp .env.example .env
+```
+
+4. .env 内の環境変数を以下の通り変更
+<pre><code class="language-env">
+
+```env
+
+DB_CONNECTION=mysql
+DB_HOST=mysql
+DB_PORT=3306
+DB_DATABASE=laravel_db
+DB_USERNAME=laravel_user
 DB_PASSWORD=laravel_pass
 
-MAIL_MAILER=smtp  
-MAIL_HOST=mailhog  
-MAIL_PORT=1025  
-MAIL_USERNAME=null  
-MAIL_PASSWORD=null  
-MAIL_ENCRYPTION=null  
-MAIL_FROM_ADDRESS=noreply@example.com  
+MAIL_MAILER=smtp
+MAIL_HOST=mailhog
+MAIL_PORT=1025
+MAIL_USERNAME=null
+MAIL_PASSWORD=null
+MAIL_ENCRYPTION=null
+MAIL_FROM_ADDRESS=noreply@example.com
 MAIL_FROM_NAME="${APP_NAME}"
 
-5. php artisan key:generate
-6. php artisan migrate
-7. php artisan db:seed
+```
+
+/code></pre>
+
+5. アプリケーションキーを生成
+
+```bash
+php artisan key:generate
+```
+
+6. データベースのマイグレーションを実行
+
+```bash
+php artisan migrate
+```
+
+7. 初期データのシーディングを実行
+
+```bash
+php artisan db:seed
+```
 
 ## 作成済みユーザー情報
 
